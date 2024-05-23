@@ -1,7 +1,7 @@
 "use client";
 
 import { NextPage } from "next";
-import { VersesList_Search } from "~~/components/search/VersesList_search";
+import { VersesList_Search } from "./_components/VersesList_search";
 
 const Search: NextPage = () => {
   return (

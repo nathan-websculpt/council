@@ -61,7 +61,7 @@ export const VersesList_Search = () => {
   } else {
     return (
       <>
-        <div className="flex self-center w-full mb-6">
+        {/* <div className="flex self-center w-full mb-6">
           {data?.verses?.length > 0 && (
             <>
               <article className="px-4 mx-auto mt-8 mb-12 prose lg:prose-lg md:px-0">
@@ -79,7 +79,7 @@ export const VersesList_Search = () => {
               </article>
             </>
           )}
-        </div>
+        </div> */}
 
         <div className="flex flex-col gap-1 mb-12 md:flex-row">
           <input

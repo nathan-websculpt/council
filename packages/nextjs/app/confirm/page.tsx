@@ -1,7 +1,7 @@
 "use client";
 
 import { NextPage } from "next";
-import { GetVerses } from "~~/components/confirm/GetVerses";
+import { GetVerses } from "./_components/GetVerses";
 
 const Confirm: NextPage = () => {
   return (

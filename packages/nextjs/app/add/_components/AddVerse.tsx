@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { SaveVerse } from "./SaveVerse";
 import { getGospelOfJohn } from "~~/helpers/John";
 import { notification } from "~~/utils/scaffold-eth";
+import { SaveVerse } from "./SaveVerse";
 
 export const AddVerse = () => {
   const versesArray = getGospelOfJohn();

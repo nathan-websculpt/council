@@ -1,7 +1,7 @@
 "use client";
 
 import type { NextPage } from "next";
-import { AddVerse } from "~~/components/add/AddVerse";
+import { AddVerse } from "./_components/AddVerse";
 
 
 const AddVersePage: NextPage = () => {

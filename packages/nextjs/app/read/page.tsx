@@ -1,7 +1,7 @@
 "use client";
 
 import { NextPage } from "next";
-import { VersesList_Read } from "~~/components/read/VersesList_read";
+import { VersesList_Read } from "./_components/VersesList_read";
 
 const Read: NextPage = () => {
   return (

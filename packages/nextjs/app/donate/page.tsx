@@ -1,7 +1,7 @@
 "use client";
 
 import type { NextPage } from "next";
-import { Donate } from "~~/components/donate/Donate";
+import { Donate } from "./_components/Donate";
 
 const DonatePage: NextPage = () => {
   return (

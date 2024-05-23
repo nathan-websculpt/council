@@ -1,7 +1,7 @@
 "use client";
 
 import type { NextPage } from "next";
-import { AddBulkVerse } from "~~/components/addbulk/AddBulkVerse";
+import { AddBulkVerse } from "./_components/AddBulkVerse";
 
 const AddBulkVersePage: NextPage = () => {
   return (

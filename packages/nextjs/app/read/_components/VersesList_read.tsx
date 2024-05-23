@@ -74,7 +74,7 @@ export const VersesList_Read = () => {
 
   return (
     <>
-      <div className="flex self-center w-full mb-6">
+      {/* <div className="flex self-center w-full mb-6">
         {data?.verses?.length > 0 && (
           <>
             <article className="px-4 mx-auto mt-8 mb-12 prose lg:prose-lg md:px-0">
@@ -92,7 +92,7 @@ export const VersesList_Read = () => {
             </article>
           </>
         )}
-      </div>
+      </div> */}
 
       <div className="flex flex-col items-center justify-center gap-1 mb-12 lg:justify-between lg:flex-row lg:px-12">
         <div className="flex flex-row gap-4 place-items-center">

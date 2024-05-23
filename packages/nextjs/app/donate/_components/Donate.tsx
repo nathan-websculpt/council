@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { IntegerVariant, isValidInteger } from "../scaffold-eth";
+import { IntegerVariant, isValidInteger } from "../../../components/scaffold-eth";
 import { useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 import { notification } from "~~/utils/scaffold-eth";
 import { parseEther } from "viem";

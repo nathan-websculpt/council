@@ -11,7 +11,7 @@ const Home: NextPage = () => {
   return (
     <>
       <div className="flex flex-col w-full">
-        <article className="px-4 mx-auto mt-8 mb-12 prose md:px-0 lg:prose-lg">
+        {/* <article className="px-4 mx-auto mt-8 mb-12 prose md:px-0 lg:prose-lg">
           <h1>onchain Gospel of John</h1>
           <blockquote>
             While this Smart Contract is live on Optimism Mainnet, it has not been audited, and it should be considered
@@ -29,7 +29,7 @@ const Home: NextPage = () => {
           <Link href="/about" passHref className="link">
             Click to Learn More about this project &mdash; it's more than just censor-proofing books
           </Link>{" "}
-        </article>
+        </article> */}
 
         <div className="flex-grow w-full px-8 py-12 mt-16 bg-base-300">
           <div className="flex flex-col items-center justify-center gap-12 sm:flex-row">
