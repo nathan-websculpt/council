@@ -310,7 +310,7 @@ const deployedContracts = {
   },
   31337: {
     John: {
-      address: "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6",
+      address: "0xB7f8BC63BbcaD18155201308C8f3540b07f84F5e",
       abi: [
         {
           inputs: [
@@ -364,6 +364,25 @@ const deployedContracts = {
             },
           ],
           name: "Donation",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: false,
+              internalType: "address",
+              name: "confirmedBy",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "bytes",
+              name: "verseId",
+              type: "bytes",
+            },
+          ],
+          name: "FinalConfirmation",
           type: "event",
         },
         {

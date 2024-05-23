@@ -76,6 +76,8 @@ contract John is Ownable, ReentrancyGuard {
 
 	event Confirmation(address confirmedBy, bytes verseId);
 
+	event FinalConfirmation(address confirmedBy, bytes verseId);
+
 	event Donation(address donor, uint256 amount);
 
 	modifier isContractInEditMode() {
@@ -94,7 +96,10 @@ contract John is Ownable, ReentrancyGuard {
 				break;
 			}
 		}
-		require(canContinue, "Only members of the Council have access to this functionality.");
+		require(
+			canContinue,
+			"Only members of the Council have access to this functionality."
+		);
 		_;
 	}
 
@@ -111,19 +116,25 @@ contract John is Ownable, ReentrancyGuard {
 	}
 
 	modifier verseNotConfirmed(uint256 verseId) {
-		require(!verses[verseId].confirmed, "This verse already has enough confirmations"); //this is probably redundant, since only members can confirm
+		require(
+			!verses[verseId].confirmed,
+			"This verse already has enough confirmations"
+		); //this is probably redundant, since only members can confirm
 		_;
 	}
 
 	modifier hasNotVotedToExitEditMode(address addr) {
 		bool canContinue = true;
-		for(uint256 i = 0; i < votedToExitEditMode.length; i++) {
-			if(votedToExitEditMode[i] == addr) {
-				canContinue = false; 
+		for (uint256 i = 0; i < votedToExitEditMode.length; i++) {
+			if (votedToExitEditMode[i] == addr) {
+				canContinue = false;
 				break;
 			}
 		}
-		require(canContinue, "This address has already voted to exit Edit Mode");
+		require(
+			canContinue,
+			"This address has already voted to exit Edit Mode"
+		);
 		_;
 	}
 
@@ -176,13 +187,18 @@ contract John is Ownable, ReentrancyGuard {
 	{
 		confirmations[msg.sender].push(_numericalId);
 		verseConfirmations[_numericalId].push(msg.sender);
-		tryFullyConfirmVerse(_numericalId);
 		emit Confirmation(msg.sender, _verseId);
+		tryFullyConfirmVerse(_verseId, _numericalId);
 	}
 
-	function tryFullyConfirmVerse(uint256 _numericalId) private {
-		if(verseConfirmations[_numericalId].length == council.length) 
+	function tryFullyConfirmVerse(
+		bytes memory _verseId,
+		uint256 _numericalId
+	) private {
+		if (verseConfirmations[_numericalId].length == council.length) {
 			verses[_numericalId].confirmed = true;
+			emit FinalConfirmation(msg.sender, _verseId);
+		}
 	}
 
 	function voteToExitEditMode()

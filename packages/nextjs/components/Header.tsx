@@ -55,6 +55,10 @@ export const menuLinks: HeaderMenuLink[] = [
     label: "Edit Mode",
     href: "/edit-mode",
   },
+  {
+    label: "Fully Confirmed",
+    href: "/fully-confirmed",
+  },
 ];
 
 export const HeaderMenuLinks = () => {

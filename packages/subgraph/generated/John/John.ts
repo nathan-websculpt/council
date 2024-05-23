@@ -54,6 +54,28 @@ export class Donation__Params {
   }
 }
 
+export class FinalConfirmation extends ethereum.Event {
+  get params(): FinalConfirmation__Params {
+    return new FinalConfirmation__Params(this);
+  }
+}
+
+export class FinalConfirmation__Params {
+  _event: FinalConfirmation;
+
+  constructor(event: FinalConfirmation) {
+    this._event = event;
+  }
+
+  get confirmedBy(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get verseId(): Bytes {
+    return this._event.parameters[1].value.toBytes();
+  }
+}
+
 export class OwnershipTransferred extends ethereum.Event {
   get params(): OwnershipTransferred__Params {
     return new OwnershipTransferred__Params(this);

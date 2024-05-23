@@ -10,9 +10,20 @@ type Verse @entity {
   transactionHash: Bytes!
   confirmations: [Confirmation!] @derivedFrom(field: "verse")
   confirmationCount: Int!
+  confirmed: Boolean!
 }
 
 type Confirmation @entity(immutable: true) {
+  id: Bytes!
+  confirmedBy: Bytes!
+  verseId: Bytes!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+  verse: Verse
+}
+
+type FinalConfirmation @entity(immutable: true) {
   id: Bytes!
   confirmedBy: Bytes!
   verseId: Bytes!

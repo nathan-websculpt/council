@@ -31,19 +31,22 @@ export const GQL_VERSES_For_Display_search_by_chapter = (searchInput: string) =>
     `;
   else
     return gql`
-  query ($limit: Int!, $offset: Int!, $searchBy: String) {
-    verses(
-      where: { chapterNumber_gte: $searchBy }
-      orderBy: verseId, orderDirection: asc, first: $limit, skip: $offset
-      ) {
-      id
-      verseId
-      chapterNumber
-      verseNumber
-      verseContent
-    }
-  }
-`;
+      query ($limit: Int!, $offset: Int!, $searchBy: String) {
+        verses(
+          where: { chapterNumber_gte: $searchBy }
+          orderBy: verseId
+          orderDirection: asc
+          first: $limit
+          skip: $offset
+        ) {
+          id
+          verseId
+          chapterNumber
+          verseNumber
+          verseContent
+        }
+      }
+    `;
 };
 
 //for the SEARCH page
@@ -62,19 +65,22 @@ export const GQL_VERSES_For_Display_with_search = (searchInput: string) => {
     `;
   else
     return gql`
-  query ($limit: Int!, $offset: Int!, $searchBy: String) {
-    verses(
-      where: { verseContent_contains_nocase: $searchBy }
-      orderBy: verseId, orderDirection: asc, first: $limit, skip: $offset
-      ) {
-      id
-      verseId
-      chapterNumber
-      verseNumber
-      verseContent
-    }
-  }
-`;
+      query ($limit: Int!, $offset: Int!, $searchBy: String) {
+        verses(
+          where: { verseContent_contains_nocase: $searchBy }
+          orderBy: verseId
+          orderDirection: asc
+          first: $limit
+          skip: $offset
+        ) {
+          id
+          verseId
+          chapterNumber
+          verseNumber
+          verseContent
+        }
+      }
+    `;
 };
 
 //for the CONFIRMATION page
@@ -88,6 +94,21 @@ export const GQL_VERSES_For_Confirmation = () => {
         verseNumber
         verseContent
         confirmationCount
+      }
+    }
+  `;
+};
+
+//for the FULLY CONFIRMED page
+export const GQL_VERSES_Fully_Confirmed = () => {
+  return gql`
+    query ($limit: Int!, $offset: Int!) {
+      verses(orderBy: verseId, orderDirection: asc, first: $limit, skip: $offset, where: { confirmed: true }) {
+        id
+        verseId
+        chapterNumber
+        verseNumber
+        verseContent
       }
     }
   `;

@@ -2,11 +2,13 @@ import { Bytes, log, BigInt } from "@graphprotocol/graph-ts";
 import {
   Verse as VerseEvent,
   Confirmation as ConfirmationEvent,
+  FinalConfirmation as FinalConfirmationEvent,
   Donation as DonationEvent,
 } from "../generated/John/John";
 import {
   Verse,
   Confirmation,
+  FinalConfirmation,
   Donation
 } from "../generated/schema";
 
@@ -23,6 +25,7 @@ export function handleVerse(
   entity.chapterNumber = event.params.chapterNumber;
   entity.verseContent = event.params.verseContent;
   entity.confirmationCount = 0;
+  entity.confirmed = false;
 
   entity.blockNumber = event.block.number;
   entity.blockTimestamp = event.block.timestamp;
@@ -52,6 +55,27 @@ export function handleConfirmation(event: ConfirmationEvent): void {
   entity.save();
 }
 
+export function handleFinalConfirmation(event: FinalConfirmationEvent): void {
+  let entity = new FinalConfirmation(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  );
+  entity.confirmedBy = event.params.confirmedBy;
+  entity.verseId = event.params.verseId;
+
+  entity.blockNumber = event.block.number;
+  entity.blockTimestamp = event.block.timestamp;
+  entity.transactionHash = event.transaction.hash;
+
+  let verseEntity = Verse.load(event.params.verseId);
+  if (verseEntity !== null) {
+    entity.verse = verseEntity.id;
+    verseEntity.confirmed = true;
+    verseEntity.save();
+  }
+
+  entity.save();
+}
+
 export function handleDonation(event: DonationEvent): void {
   let entity = new Donation(
     event.transaction.hash.concatI32(event.logIndex.toI32())
@@ -65,3 +89,4 @@ export function handleDonation(event: DonationEvent): void {
 
   entity.save();
 }
+
