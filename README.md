@@ -8,7 +8,6 @@
 - [Contract on Op Mainnet](https://optimistic.etherscan.io/address/0x29BB1313321dbA27Ad074DD6AD2943040319B439)
 - [Read Now](https://www.gospelonchain.com/read)
 - [Search](https://www.gospelonchain.com/search)
-- test
 
 ### What's next?
 
