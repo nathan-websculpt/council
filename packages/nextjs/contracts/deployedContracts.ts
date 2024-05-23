@@ -310,7 +310,7 @@ const deployedContracts = {
   },
   31337: {
     John: {
-      address: "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853",
+      address: "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6",
       abi: [
         {
           inputs: [
@@ -609,6 +609,30 @@ const deployedContracts = {
               name: "",
               type: "uint256",
             },
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          name: "verseConfirmations",
+          outputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
           ],
           name: "verses",
           outputs: [
@@ -631,6 +655,11 @@ const deployedContracts = {
               internalType: "string",
               name: "verseContent",
               type: "string",
+            },
+            {
+              internalType: "bool",
+              name: "confirmed",
+              type: "bool",
             },
           ],
           stateMutability: "view",

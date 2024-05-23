@@ -40,7 +40,8 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
 contract John is Ownable, ReentrancyGuard {
 	/**
-		Contract will have an on/off state (which also requires all member-votes to be functional)
+		Contract will have a good/bad state that members must vote on -- they will do this at the end, 
+			asserting whether or not the effort was a success
 	 */
 
 	/**
@@ -53,10 +54,12 @@ contract John is Ownable, ReentrancyGuard {
 		uint256 verseNumber;
 		uint256 chapterNumber;
 		string verseContent;
+		bool confirmed;
 	}
 
 	mapping(uint256 => VerseStr) public verses;
 	mapping(address => uint256[]) public confirmations;
+	mapping(uint256 => address[]) public verseConfirmations;
 	address[] public council;
 	address[] public votedToExitEditMode;
 	uint256 public numberOfVerses = 0;
@@ -95,7 +98,7 @@ contract John is Ownable, ReentrancyGuard {
 		_;
 	}
 
-	modifier hasNotConfirmed(address addr, uint256 verseId) {
+	modifier userHasNotConfirmed(address addr, uint256 verseId) {
 		bool canContinue = true;
 		for (uint256 i = 0; i < confirmations[addr].length; i++) {
 			if (confirmations[addr][i] == verseId) {
@@ -104,6 +107,23 @@ contract John is Ownable, ReentrancyGuard {
 			}
 		}
 		require(canContinue, "This address has already confirmed this verse.");
+		_;
+	}
+
+	modifier verseNotConfirmed(uint256 verseId) {
+		require(!verses[verseId].confirmed, "This verse already has enough confirmations"); //this is probably redundant, since only members can confirm
+		_;
+	}
+
+	modifier hasNotVotedToExitEditMode(address addr) {
+		bool canContinue = true;
+		for(uint256 i = 0; i < votedToExitEditMode.length; i++) {
+			if(votedToExitEditMode[i] == addr) {
+				canContinue = false; 
+				break;
+			}
+		}
+		require(canContinue, "This address has already voted to exit Edit Mode");
 		_;
 	}
 
@@ -151,17 +171,25 @@ contract John is Ownable, ReentrancyGuard {
 		external
 		isContractInEditMode
 		memberOfCouncil(msg.sender)
-		hasNotConfirmed(msg.sender, _numericalId)
+		userHasNotConfirmed(msg.sender, _numericalId)
+		verseNotConfirmed(_numericalId)
 	{
 		confirmations[msg.sender].push(_numericalId);
+		verseConfirmations[_numericalId].push(msg.sender);
+		tryFullyConfirmVerse(_numericalId);
 		emit Confirmation(msg.sender, _verseId);
+	}
+
+	function tryFullyConfirmVerse(uint256 _numericalId) private {
+		if(verseConfirmations[_numericalId].length == council.length) 
+			verses[_numericalId].confirmed = true;
 	}
 
 	function voteToExitEditMode()
 		external
 		isContractInEditMode
 		memberOfCouncil(msg.sender)
-	//todo: modifier; hasn't already voted
+		hasNotVotedToExitEditMode(msg.sender)
 	{
 		votedToExitEditMode.push(msg.sender);
 		if (votedToExitEditMode.length == council.length) {
@@ -221,6 +249,7 @@ contract John is Ownable, ReentrancyGuard {
 		thisVerse.verseNumber = _verseNumber;
 		thisVerse.chapterNumber = _chapterNumber;
 		thisVerse.verseContent = _verseContent;
+		thisVerse.confirmed = false;
 
 		emit Verse(
 			msg.sender,

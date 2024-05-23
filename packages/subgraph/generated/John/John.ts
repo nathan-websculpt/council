@@ -115,12 +115,20 @@ export class John__versesResult {
   value1: BigInt;
   value2: BigInt;
   value3: string;
+  value4: boolean;
 
-  constructor(value0: BigInt, value1: BigInt, value2: BigInt, value3: string) {
+  constructor(
+    value0: BigInt,
+    value1: BigInt,
+    value2: BigInt,
+    value3: string,
+    value4: boolean
+  ) {
     this.value0 = value0;
     this.value1 = value1;
     this.value2 = value2;
     this.value3 = value3;
+    this.value4 = value4;
   }
 
   toMap(): TypedMap<string, ethereum.Value> {
@@ -129,6 +137,7 @@ export class John__versesResult {
     map.set("value1", ethereum.Value.fromUnsignedBigInt(this.value1));
     map.set("value2", ethereum.Value.fromUnsignedBigInt(this.value2));
     map.set("value3", ethereum.Value.fromString(this.value3));
+    map.set("value4", ethereum.Value.fromBoolean(this.value4));
     return map;
   }
 
@@ -146,6 +155,10 @@ export class John__versesResult {
 
   getVerseContent(): string {
     return this.value3;
+  }
+
+  getConfirmed(): boolean {
+    return this.value4;
   }
 }
 
@@ -262,10 +275,42 @@ export class John extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
+  verseConfirmations(param0: BigInt, param1: BigInt): Address {
+    let result = super.call(
+      "verseConfirmations",
+      "verseConfirmations(uint256,uint256):(address)",
+      [
+        ethereum.Value.fromUnsignedBigInt(param0),
+        ethereum.Value.fromUnsignedBigInt(param1)
+      ]
+    );
+
+    return result[0].toAddress();
+  }
+
+  try_verseConfirmations(
+    param0: BigInt,
+    param1: BigInt
+  ): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "verseConfirmations",
+      "verseConfirmations(uint256,uint256):(address)",
+      [
+        ethereum.Value.fromUnsignedBigInt(param0),
+        ethereum.Value.fromUnsignedBigInt(param1)
+      ]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
   verses(param0: BigInt): John__versesResult {
     let result = super.call(
       "verses",
-      "verses(uint256):(uint256,uint256,uint256,string)",
+      "verses(uint256):(uint256,uint256,uint256,string,bool)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
 
@@ -273,14 +318,15 @@ export class John extends ethereum.SmartContract {
       result[0].toBigInt(),
       result[1].toBigInt(),
       result[2].toBigInt(),
-      result[3].toString()
+      result[3].toString(),
+      result[4].toBoolean()
     );
   }
 
   try_verses(param0: BigInt): ethereum.CallResult<John__versesResult> {
     let result = super.tryCall(
       "verses",
-      "verses(uint256):(uint256,uint256,uint256,string)",
+      "verses(uint256):(uint256,uint256,uint256,string,bool)",
       [ethereum.Value.fromUnsignedBigInt(param0)]
     );
     if (result.reverted) {
@@ -292,7 +338,8 @@ export class John extends ethereum.SmartContract {
         value[0].toBigInt(),
         value[1].toBigInt(),
         value[2].toBigInt(),
-        value[3].toString()
+        value[3].toString(),
+        value[4].toBoolean()
       )
     );
   }
