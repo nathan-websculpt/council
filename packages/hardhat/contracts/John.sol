@@ -39,6 +39,15 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
  */
 
 contract John is Ownable, ReentrancyGuard {
+	/**
+		Contract will have an on/off state (which also requires all member-votes to be functional)
+	 */
+
+	/**
+		Either: Verses will have two copies (draft and fully-confirmed);
+		    OR: Verses will have a bool that changes when it is fully-confirmed;
+	 */
+
 	struct VerseStr {
 		uint256 verseId;
 		uint256 verseNumber;
@@ -48,8 +57,10 @@ contract John is Ownable, ReentrancyGuard {
 
 	mapping(uint256 => VerseStr) public verses;
 	mapping(address => uint256[]) public confirmations;
-	uint256 public numberOfVerses = 0;
 	address[] public council;
+	address[] public votedToExitEditMode;
+	uint256 public numberOfVerses = 0;
+	bool public contractInEditMode = true;
 
 	//TODO: indexed parameters
 	event Verse(
@@ -64,6 +75,14 @@ contract John is Ownable, ReentrancyGuard {
 
 	event Donation(address donor, uint256 amount);
 
+	modifier isContractInEditMode() {
+		require(
+			contractInEditMode,
+			"This Contract has been voted as complete; therefore, no more verses can be added."
+		);
+		_;
+	}
+
 	modifier memberOfCouncil(address addr) {
 		bool canContinue = false;
 		for (uint256 i = 0; i < council.length; i++) {
@@ -72,7 +91,7 @@ contract John is Ownable, ReentrancyGuard {
 				break;
 			}
 		}
-		require(canContinue, "Only members of the Council can confirm verses.");
+		require(canContinue, "Only members of the Council have access to this functionality.");
 		_;
 	}
 
@@ -101,7 +120,7 @@ contract John is Ownable, ReentrancyGuard {
 		uint256 _verseNumber,
 		uint256 _chapterNumber,
 		string memory _verseContent
-	) external onlyOwner {
+	) external onlyOwner isContractInEditMode {
 		_storeVerse(_verseNumber, _chapterNumber, _verseContent);
 	}
 
@@ -109,7 +128,7 @@ contract John is Ownable, ReentrancyGuard {
 		uint256[] memory _verseNumber,
 		uint256[] memory _chapterNumber,
 		string[] memory _verseContent
-	) external onlyOwner {
+	) external onlyOwner isContractInEditMode {
 		uint256 length = _verseNumber.length;
 		require(
 			length == _chapterNumber.length,
@@ -130,11 +149,52 @@ contract John is Ownable, ReentrancyGuard {
 		uint256 _numericalId
 	)
 		external
+		isContractInEditMode
 		memberOfCouncil(msg.sender)
 		hasNotConfirmed(msg.sender, _numericalId)
 	{
 		confirmations[msg.sender].push(_numericalId);
 		emit Confirmation(msg.sender, _verseId);
+	}
+
+	function voteToExitEditMode()
+		external
+		isContractInEditMode
+		memberOfCouncil(msg.sender)
+	//todo: modifier; hasn't already voted
+	{
+		votedToExitEditMode.push(msg.sender);
+		if (votedToExitEditMode.length == council.length) {
+			tryExitEditMode();
+		}
+	}
+
+	function tryExitEditMode() public isContractInEditMode {
+		bool canContinue = true;
+		for (uint256 i = 0; i < council.length; i++) {
+			if (!councilMemberHasVotedToExitEditMode(council[i])) {
+				canContinue = false;
+				break;
+			}
+		}
+		require(
+			canContinue,
+			"Can not exit Edit Mode, because there either aren't enough votes or there is a problem with one of the votes."
+		);
+		contractInEditMode = false;
+	}
+
+	function councilMemberHasVotedToExitEditMode(
+		address councilMember
+	) private view returns (bool) {
+		bool canContinue = false;
+		for (uint256 i = 0; i < votedToExitEditMode.length; i++) {
+			if (votedToExitEditMode[i] == councilMember) {
+				canContinue = true;
+				break;
+			}
+		}
+		return canContinue;
 	}
 
 	function withdraw() external onlyOwner nonReentrant {

@@ -51,6 +51,10 @@ export const menuLinks: HeaderMenuLink[] = [
     label: "About",
     href: "/about",
   },
+  {
+    label: "Edit Mode",
+    href: "/edit-mode",
+  },
 ];
 
 export const HeaderMenuLinks = () => {

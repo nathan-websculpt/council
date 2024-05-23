@@ -186,6 +186,29 @@ export class John extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
+  contractInEditMode(): boolean {
+    let result = super.call(
+      "contractInEditMode",
+      "contractInEditMode():(bool)",
+      []
+    );
+
+    return result[0].toBoolean();
+  }
+
+  try_contractInEditMode(): ethereum.CallResult<boolean> {
+    let result = super.tryCall(
+      "contractInEditMode",
+      "contractInEditMode():(bool)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
   council(param0: BigInt): Address {
     let result = super.call("council", "council(uint256):(address)", [
       ethereum.Value.fromUnsignedBigInt(param0)
@@ -272,6 +295,29 @@ export class John extends ethereum.SmartContract {
         value[3].toString()
       )
     );
+  }
+
+  votedToExitEditMode(param0: BigInt): Address {
+    let result = super.call(
+      "votedToExitEditMode",
+      "votedToExitEditMode(uint256):(address)",
+      [ethereum.Value.fromUnsignedBigInt(param0)]
+    );
+
+    return result[0].toAddress();
+  }
+
+  try_votedToExitEditMode(param0: BigInt): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "votedToExitEditMode",
+      "votedToExitEditMode(uint256):(address)",
+      [ethereum.Value.fromUnsignedBigInt(param0)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 }
 
@@ -497,6 +543,58 @@ export class TransferOwnershipCall__Outputs {
   _call: TransferOwnershipCall;
 
   constructor(call: TransferOwnershipCall) {
+    this._call = call;
+  }
+}
+
+export class TryExitEditModeCall extends ethereum.Call {
+  get inputs(): TryExitEditModeCall__Inputs {
+    return new TryExitEditModeCall__Inputs(this);
+  }
+
+  get outputs(): TryExitEditModeCall__Outputs {
+    return new TryExitEditModeCall__Outputs(this);
+  }
+}
+
+export class TryExitEditModeCall__Inputs {
+  _call: TryExitEditModeCall;
+
+  constructor(call: TryExitEditModeCall) {
+    this._call = call;
+  }
+}
+
+export class TryExitEditModeCall__Outputs {
+  _call: TryExitEditModeCall;
+
+  constructor(call: TryExitEditModeCall) {
+    this._call = call;
+  }
+}
+
+export class VoteToExitEditModeCall extends ethereum.Call {
+  get inputs(): VoteToExitEditModeCall__Inputs {
+    return new VoteToExitEditModeCall__Inputs(this);
+  }
+
+  get outputs(): VoteToExitEditModeCall__Outputs {
+    return new VoteToExitEditModeCall__Outputs(this);
+  }
+}
+
+export class VoteToExitEditModeCall__Inputs {
+  _call: VoteToExitEditModeCall;
+
+  constructor(call: VoteToExitEditModeCall) {
+    this._call = call;
+  }
+}
+
+export class VoteToExitEditModeCall__Outputs {
+  _call: VoteToExitEditModeCall;
+
+  constructor(call: VoteToExitEditModeCall) {
     this._call = call;
   }
 }
