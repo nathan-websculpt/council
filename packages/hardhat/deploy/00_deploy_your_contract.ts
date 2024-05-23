@@ -24,10 +24,12 @@ const deployJohn: DeployFunction = async function (hre: HardhatRuntimeEnvironmen
   // const owner = "0x1e7aAbB9D0C701208E875131d0A1cFcDAba79350"; //PROD WALLET
   const owner = "0xf0ADAE0823444d70Eb5826F3C26b3704611c759A"; //todo change to fe wallet
 
+  const council = ["0xf0ADAE0823444d70Eb5826F3C26b3704611c759A", "0xe94F3C7a1BF55D334700c06B08B60770cd7Ca5D0"];
+
   await deploy("John", {
     from: deployer,
     // Contract constructor arguments
-    args: [owner],
+    args: [owner, council],
     log: true,
     // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
     // automatically mining the contract deployment transaction. There is no effect on live networks.

@@ -8,7 +8,7 @@ export const AddBulkVerse = () => {
   const [selectedChapter, setSelectedChapter] = useState<string>(undefined);
   const [selectedVerse, setSelectedVerse] = useState<string>(undefined);
   const [selectedIndex, setSelectedIndex] = useState<number>(undefined);
-  const [amountInBatch, setAmountInBatch] = useState<number>(10);
+  const [amountInBatch, setAmountInBatch] = useState<number>(150);
   const [selectedVersesObject, setSelectedVersesObject] = useState<object[]>(undefined);
 
   useEffect(() => {

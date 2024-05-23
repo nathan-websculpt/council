@@ -49,6 +49,7 @@ contract John is Ownable, ReentrancyGuard {
 	mapping(uint256 => VerseStr) public verses;
 	mapping(address => uint256[]) public confirmations;
 	uint256 public numberOfVerses = 0;
+	address[] public council;
 
 	//TODO: indexed parameters
 	event Verse(
@@ -63,6 +64,18 @@ contract John is Ownable, ReentrancyGuard {
 
 	event Donation(address donor, uint256 amount);
 
+	modifier memberOfCouncil(address addr) {
+		bool canContinue = false;
+		for (uint256 i = 0; i < council.length; i++) {
+			if (council[i] == addr) {
+				canContinue = true;
+				break;
+			}
+		}
+		require(canContinue, "Only members of the Council can confirm verses.");
+		_;
+	}
+
 	modifier hasNotConfirmed(address addr, uint256 verseId) {
 		bool canContinue = true;
 		for (uint256 i = 0; i < confirmations[addr].length; i++) {
@@ -75,8 +88,9 @@ contract John is Ownable, ReentrancyGuard {
 		_;
 	}
 
-	constructor(address _contractOwner) {
+	constructor(address _contractOwner, address[] memory _council) {
 		_transferOwnership(_contractOwner);
+		council = _council;
 	}
 
 	receive() external payable {
@@ -114,7 +128,11 @@ contract John is Ownable, ReentrancyGuard {
 	function confirmVerse(
 		bytes memory _verseId,
 		uint256 _numericalId
-	) external hasNotConfirmed(msg.sender, _numericalId) {
+	)
+		external
+		memberOfCouncil(msg.sender)
+		hasNotConfirmed(msg.sender, _numericalId)
+	{
 		confirmations[msg.sender].push(_numericalId);
 		emit Confirmation(msg.sender, _verseId);
 	}

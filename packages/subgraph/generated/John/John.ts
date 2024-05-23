@@ -186,6 +186,25 @@ export class John extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
+  council(param0: BigInt): Address {
+    let result = super.call("council", "council(uint256):(address)", [
+      ethereum.Value.fromUnsignedBigInt(param0)
+    ]);
+
+    return result[0].toAddress();
+  }
+
+  try_council(param0: BigInt): ethereum.CallResult<Address> {
+    let result = super.tryCall("council", "council(uint256):(address)", [
+      ethereum.Value.fromUnsignedBigInt(param0)
+    ]);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
   numberOfVerses(): BigInt {
     let result = super.call("numberOfVerses", "numberOfVerses():(uint256)", []);
 
@@ -275,6 +294,10 @@ export class ConstructorCall__Inputs {
 
   get _contractOwner(): Address {
     return this._call.inputValues[0].value.toAddress();
+  }
+
+  get _council(): Array<Address> {
+    return this._call.inputValues[1].value.toAddressArray();
   }
 }
 
