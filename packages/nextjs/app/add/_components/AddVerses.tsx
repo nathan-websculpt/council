@@ -1,30 +1,32 @@
 import { useEffect, useState } from "react";
+import { SaveVerses } from "./SaveVerses";
 import { getGospelOfJohn } from "~~/helpers/John";
 import { notification } from "~~/utils/scaffold-eth";
-import { SaveVerse } from "./SaveVerse";
 
-export const AddVerse = () => {
+export const AddVerses = () => {
   const versesArray = getGospelOfJohn();
   const [selectedChapter, setSelectedChapter] = useState<string>(undefined);
   const [selectedVerse, setSelectedVerse] = useState<string>(undefined);
   const [selectedIndex, setSelectedIndex] = useState<number>(undefined);
-  const [selectedVerseObject, setSelectedVerseObject] = useState<object>(undefined);
+  const [amountInBatch, setAmountInBatch] = useState<number>(150);
+  const [selectedVersesObject, setSelectedVersesObject] = useState<object[]>(undefined);
 
   useEffect(() => {
-    if (selectedVerseObject !== undefined) {
-      console.log("selected verse obj:", selectedVerseObject);
+    if (selectedVersesObject !== undefined) {
+      console.log("selected verses obj:", selectedVersesObject);
     }
-  }, [selectedVerseObject]);
+  }, [selectedVersesObject]);
 
   useEffect(() => {
+    console.log("selected index: ", selectedIndex);
     if (selectedIndex !== undefined) {
       setSelectedChapter("");
       setSelectedVerse("");
-      setSelectedVerseObject(versesArray[selectedIndex]);
+      setSelectedVersesObject(versesArray.slice(selectedIndex, amountInBatch + selectedIndex)); //starts at selection, and gets range of items
     }
   }, [selectedIndex]);
 
-  const getVerse = async () => {
+  const getVerses = async () => {
     if (!selectedChapter || !selectedVerse) {
       notification.error("need a chapter AND verse selected to retrieve a verse.");
       return;
@@ -41,11 +43,18 @@ export const AddVerse = () => {
   };
 
   const getNextVerse = async () => {
-    setSelectedIndex(selectedIndex + 1);
+    console.log(selectedIndex + amountInBatch);
+    setSelectedIndex(selectedIndex + amountInBatch);
   };
 
   return (
     <>
+      <p>how many in batch?</p>
+      <input
+        className="w-3/4 input input-bordered input-accent"
+        value={amountInBatch}
+        onChange={e => setAmountInBatch(parseInt(e.target.value))}
+      />
       <p>choose where to start</p>
       <div className="flex flex-row justfy-between">
         <input
@@ -62,37 +71,35 @@ export const AddVerse = () => {
           onChange={e => setSelectedVerse(e.target.value)}
         />
 
-        <button className="btn btn-primary" onClick={() => getVerse()}>
+        <button className="btn btn-primary" onClick={() => getVerses()}>
           GET VERSE
         </button>
       </div>
 
       <div className="px-6 pt-10 pb-8 mt-6 shadow-xl bg-primary sm:mx-auto sm:max-w-11/12 md:w-full sm:rounded-lg sm:px-10">
-        {selectedVerseObject !== undefined && (
-          <>
-            <p className="text-lg">{selectedVerseObject?.FullVerseChapter}</p>
-            <p className="text-2xl">{selectedVerseObject?.VerseContent}</p>
-            <p className="text-sm">STRING LENGTH: {selectedVerseObject?.StringLength}</p>
-          </>
-        )}
+        {selectedVersesObject?.map(verse => (
+          <div key={verse.FullVerseChapter} className="flex flex-row gap-6">
+            <p className="text-lg text-nowrap">{verse?.FullVerseChapter}</p>
+            <p className="text-2xl">{verse?.VerseContent}</p>
+          </div>
+        ))}
       </div>
-
 
       <div className="mt-6 mb-6">
         <button className="btn btn-primary" onClick={() => getNextVerse()}>
           GET NEXT
         </button>
       </div>
-      
+
       <hr />
 
       <div className="mt-32">
-        {selectedVerseObject !== undefined && (
+        {selectedVersesObject !== undefined && (
           <>
-            <SaveVerse
-              content={selectedVerseObject?.VerseContent}
-              chapterNum={BigInt(selectedVerseObject?.ChapterNumber)}
-              verseNum={BigInt(selectedVerseObject?.VerseNumber)}
+            <SaveVerses
+              content={selectedVersesObject.map(x => x.VerseContent)}
+              chapterNum={selectedVersesObject.map(x => BigInt(x.ChapterNumber))}
+              verseNum={selectedVersesObject.map(x => BigInt(x.VerseNumber))}
             />
           </>
         )}

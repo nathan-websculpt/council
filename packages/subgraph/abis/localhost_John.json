@@ -154,29 +154,6 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "_verseNumber",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_chapterNumber",
-        "type": "uint256"
-      },
-      {
-        "internalType": "string",
-        "name": "_verseContent",
-        "type": "string"
-      }
-    ],
-    "name": "addVerse",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
         "internalType": "bytes",
         "name": "_verseId",
         "type": "bytes"

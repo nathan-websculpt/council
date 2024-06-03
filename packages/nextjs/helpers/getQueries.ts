@@ -113,3 +113,18 @@ export const GQL_VERSES_Fully_Confirmed = () => {
     }
   `;
 };
+
+//returns last verse added
+//for use on the Add Verses page
+export const GQL_VERSE_Last_Added = () => {
+  return gql`
+    query {
+      verses(first: 1, orderBy: verseId, orderDirection: desc) {
+        verseId
+        chapterNumber
+        verseNumber
+        verseContent
+      }
+    }
+  `;
+};

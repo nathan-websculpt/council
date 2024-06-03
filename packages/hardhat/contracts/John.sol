@@ -147,19 +147,11 @@ contract John is Ownable, ReentrancyGuard {
 		donate();
 	}
 
-	function addVerse(
-		uint256 _verseNumber,
-		uint256 _chapterNumber,
-		string memory _verseContent
-	) external onlyOwner isContractInEditMode {
-		_storeVerse(_verseNumber, _chapterNumber, _verseContent);
-	}
-
 	function addBatchVerses(
 		uint256[] memory _verseNumber,
 		uint256[] memory _chapterNumber,
 		string[] memory _verseContent
-	) external onlyOwner isContractInEditMode {
+	) external memberOfCouncil(msg.sender) isContractInEditMode {
 		uint256 length = _verseNumber.length;
 		require(
 			length == _chapterNumber.length,

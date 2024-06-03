@@ -462,44 +462,6 @@ export class AddBatchVersesCall__Outputs {
   }
 }
 
-export class AddVerseCall extends ethereum.Call {
-  get inputs(): AddVerseCall__Inputs {
-    return new AddVerseCall__Inputs(this);
-  }
-
-  get outputs(): AddVerseCall__Outputs {
-    return new AddVerseCall__Outputs(this);
-  }
-}
-
-export class AddVerseCall__Inputs {
-  _call: AddVerseCall;
-
-  constructor(call: AddVerseCall) {
-    this._call = call;
-  }
-
-  get _verseNumber(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
-  }
-
-  get _chapterNumber(): BigInt {
-    return this._call.inputValues[1].value.toBigInt();
-  }
-
-  get _verseContent(): string {
-    return this._call.inputValues[2].value.toString();
-  }
-}
-
-export class AddVerseCall__Outputs {
-  _call: AddVerseCall;
-
-  constructor(call: AddVerseCall) {
-    this._call = call;
-  }
-}
-
 export class ConfirmVerseCall extends ethereum.Call {
   get inputs(): ConfirmVerseCall__Inputs {
     return new ConfirmVerseCall__Inputs(this);

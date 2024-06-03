@@ -310,7 +310,7 @@ const deployedContracts = {
   },
   31337: {
     John: {
-      address: "0xB7f8BC63BbcaD18155201308C8f3540b07f84F5e",
+      address: "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707",
       abi: [
         {
           inputs: [
@@ -460,29 +460,6 @@ const deployedContracts = {
             },
           ],
           name: "addBatchVerses",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "uint256",
-              name: "_verseNumber",
-              type: "uint256",
-            },
-            {
-              internalType: "uint256",
-              name: "_chapterNumber",
-              type: "uint256",
-            },
-            {
-              internalType: "string",
-              name: "_verseContent",
-              type: "string",
-            },
-          ],
-          name: "addVerse",
           outputs: [],
           stateMutability: "nonpayable",
           type: "function",

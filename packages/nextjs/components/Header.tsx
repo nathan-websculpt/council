@@ -32,12 +32,8 @@ export const menuLinks: HeaderMenuLink[] = [
     href: "/confirm",
   },
   {
-    label: "Add Verse",
+    label: "Add Verses",
     href: "/add",
-  },
-  {
-    label: "Batch Add",
-    href: "/addbulk",
   },
   {
     label: "Donate",

@@ -9,7 +9,7 @@ dataSources:
     network: localhost
     source:
       abi: John
-      address: "0xB7f8BC63BbcaD18155201308C8f3540b07f84F5e"
+      address: "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707"
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
