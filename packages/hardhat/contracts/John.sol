@@ -4,6 +4,9 @@ pragma solidity >=0.8.0 <0.9.0;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 
+//TODO: REMOVE
+import "hardhat/console.sol";
+
 /**
  * WARNING: CONTRACT IS CURRENTLY FOR PROOF-OF-CONCEPT
  * WARNING: CONTRACT HAS NOT BEEN AUDITED
@@ -161,10 +164,110 @@ contract John is Ownable, ReentrancyGuard {
 			length == _verseContent.length,
 			"Invalid array lengths - lengths did not match."
 		);
-
+		//make sure a verse has been added before checking for skipped verses/chapters
+		if (verses[1].verseNumber != 0) {
+			require(
+				preventSkippingVerse(_verseNumber[0], _chapterNumber[0]),
+				"The contract is preventing you from skipping a verse."
+			);
+			require(
+				preventSkippingChapter(_chapterNumber[0]),
+				"The contract is preventing you from skipping a chapter."
+			);
+			require(
+				enforceFirstVerseOfNewChapter(
+					_verseNumber[0],
+					_chapterNumber[0]
+				),
+				"The contract is preventing you from starting a new chapter with a verse that is not 1."
+			);
+		} else {
+			//this is a first-verse scenario
+			require(enforceFirstVerse(_verseNumber[0], _chapterNumber[0]), "The contract is preventing you from starting with a verse that is not 1:1");
+		}
 		for (uint256 i = 0; i < length; i++) {
 			_storeVerse(_verseNumber[i], _chapterNumber[i], _verseContent[i]);
 		}
+	}
+
+	//to prevent skipping verses
+	//prevents the situation of storing 1:1 and then storing 1:3
+	function preventSkippingVerse(
+		uint256 _verseNumber,
+		uint256 _chapterNumber
+	) private view returns (bool) {
+		bool canContinue = true;
+		VerseStr storage lastVerseAdded = verses[numberOfVerses];
+
+		console.log(
+			"\t\tHARDHAT CONSOLE: lastVerseAdded chap num: %s ... and this chap num: %s",
+			lastVerseAdded.chapterNumber,
+			_chapterNumber
+		);
+
+		console.log(
+			"\t\tHARDHAT CONSOLE: lastVerseAdded verse num + 1: %s ... and this verse num: %s",
+			lastVerseAdded.verseNumber + 1,
+			_verseNumber
+		);
+
+		if (lastVerseAdded.chapterNumber == _chapterNumber) {
+			if (_verseNumber != lastVerseAdded.verseNumber + 1) {
+				canContinue = false; //in this situation, they are skipping a verse;
+				//likely no real way to know if they are skipping verses IF the chapter number changes
+			}
+		}
+		console.log(
+			"\t\tHARDHAT CONSOLE: preventSkippingVerse() canContinue: %s",
+			canContinue
+		);
+		return canContinue;
+	}
+
+	//to prevent skipping chapters
+	//prevents the situation of storing 1:1 and then storing 2:2
+	function preventSkippingChapter(
+		uint256 _chapterNumber
+	) private view returns (bool) {
+		bool canContinue = true;
+		VerseStr storage lastVerseAdded = verses[numberOfVerses];
+		if (
+			_chapterNumber != lastVerseAdded.chapterNumber &&
+			_chapterNumber != lastVerseAdded.chapterNumber + 1
+		) {
+			canContinue = false; //in this situation, they are skipping a chapter;
+		}
+		console.log(
+			"\t\tHARDHAT CONSOLE: preventSkippingChapter canContinue: %s",
+			canContinue
+		);
+		return canContinue;
+	}
+	//TODO: ^^^ with the use of metadata (about the book, like how many verses each chapter has) that gets voted on, this could be tightened down even more
+
+	function enforceFirstVerseOfNewChapter(
+		uint256 _verseNumber,
+		uint256 _chapterNumber
+	) private view returns (bool) {
+		bool canContinue = true;
+		VerseStr storage lastVerseAdded = verses[numberOfVerses];
+		if (
+			_chapterNumber != lastVerseAdded.chapterNumber && _verseNumber != 1
+		) {
+			canContinue = false;
+		}
+		return canContinue;
+	}
+
+	function enforceFirstVerse(
+		uint256 _verseNumber,
+		uint256 _chapterNumber
+	) private pure returns (bool) {
+		bool canContinue = true;
+		if(_chapterNumber != 1 || _verseNumber != 1) {
+			canContinue = false;
+		}
+		return canContinue;
 	}
 
 	function confirmVerse(
@@ -266,5 +369,9 @@ contract John is Ownable, ReentrancyGuard {
 			_chapterNumber,
 			_verseContent
 		);
+	}
+
+	function getLastVerseAdded() external view returns (VerseStr memory) {
+		return verses[numberOfVerses];
 	}
 }

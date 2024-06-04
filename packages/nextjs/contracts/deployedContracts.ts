@@ -310,7 +310,7 @@ const deployedContracts = {
   },
   31337: {
     John: {
-      address: "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707",
+      address: "0x09635F643e140090A9A8Dcd712eD6285858ceBef",
       abi: [
         {
           inputs: [
@@ -543,6 +543,46 @@ const deployedContracts = {
           name: "donate",
           outputs: [],
           stateMutability: "payable",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "getLastVerseAdded",
+          outputs: [
+            {
+              components: [
+                {
+                  internalType: "uint256",
+                  name: "verseId",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "verseNumber",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "chapterNumber",
+                  type: "uint256",
+                },
+                {
+                  internalType: "string",
+                  name: "verseContent",
+                  type: "string",
+                },
+                {
+                  internalType: "bool",
+                  name: "confirmed",
+                  type: "bool",
+                },
+              ],
+              internalType: "struct John.VerseStr",
+              name: "",
+              type: "tuple",
+            },
+          ],
+          stateMutability: "view",
           type: "function",
         },
         {

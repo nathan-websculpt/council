@@ -234,6 +234,46 @@
   },
   {
     "inputs": [],
+    "name": "getLastVerseAdded",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "verseId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "verseNumber",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "chapterNumber",
+            "type": "uint256"
+          },
+          {
+            "internalType": "string",
+            "name": "verseContent",
+            "type": "string"
+          },
+          {
+            "internalType": "bool",
+            "name": "confirmed",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct John.VerseStr",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "numberOfVerses",
     "outputs": [
       {
