@@ -3,8 +3,10 @@ import { ConfirmVerse } from "./ConfirmVerse";
 import { useQuery } from "@apollo/client";
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 import { GQL_VERSES_For_Confirmation } from "~~/helpers/getQueries";
+import { useAccount } from "wagmi";
 
 export const GetVerses = () => {
+  const userAccount = useAccount();
   const [pageSize, setPageSize] = useState(25);
   const [pageNum, setPageNum] = useState(0);
 
@@ -12,8 +14,9 @@ export const GetVerses = () => {
     variables: {
       limit: pageSize,
       offset: pageNum * pageSize,
+      userWalletAddress: userAccount.address,
     },
-    pollInterval: 6000, //no longer needs to poll
+    pollInterval: 6000,
   });
 
   useEffect(() => {

@@ -310,7 +310,7 @@ const deployedContracts = {
   },
   31337: {
     John: {
-      address: "0x09635F643e140090A9A8Dcd712eD6285858ceBef",
+      address: "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
       abi: [
         {
           inputs: [
