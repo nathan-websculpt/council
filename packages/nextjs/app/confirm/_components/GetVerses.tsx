@@ -7,10 +7,12 @@ import { GQL_VERSES_For_Confirmation } from "~~/helpers/getQueries";
 
 export const GetVerses = () => {
   const userAccount = useAccount();
+  const [viewStyleDisplayString, setViewStyleDisplayString] = useState("Next-Up View");
   const [pageSize, setPageSize] = useState(25);
   const [pageNum, setPageNum] = useState(0);
   const [listOfConfirmedIDs, setListOfConfirmedIDs] = useState([]);
   const [filteredVerseList, setFilteredVerseList] = useState([]);
+  const [isViewAllMode, setIsViewAllMode] = useState(false);
 
   const { loading, error, data } = useQuery(GQL_VERSES_For_Confirmation(), {
     variables: {
@@ -50,6 +52,15 @@ export const GetVerses = () => {
     return !listOfConfirmedIDs.includes(item.id);
   };
 
+  const handleToggle = () => {
+    setIsViewAllMode(!isViewAllMode);
+  };
+
+  useEffect(() => {
+    if (isViewAllMode) setViewStyleDisplayString("View All");
+    else setViewStyleDisplayString("Next-Up View");
+  }, [isViewAllMode]);
+
   if (loading) {
     return (
       <div className="flex flex-col items-center gap-2 p-2 m-4 mx-auto border shadow-xl border-base-300 bg-base-200 sm:rounded-lg">
@@ -59,6 +70,56 @@ export const GetVerses = () => {
   } else {
     return (
       <>
+        <div className="flex flex-col items-center justify-center gap-1 mb-12 lg:justify-between lg:flex-row lg:px-12">
+          <div className="flex flex-row gap-4 place-items-center">
+            <label className="btn btn-circle btn-primary hover:btn-neutral swap swap-rotate">
+              {/* this hidden checkbox controls the state */}
+              <input type="checkbox" onChange={handleToggle} checked={isViewAllMode} />
+
+              {/* icons from: https://heroicons.com/solid */}
+              {/* BARS 2 icon */}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="size-6 swap-on"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M3 9a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 9Zm0 6.75a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75a.75.75 0 0 1-.75-.75Z"
+                  clipRule="evenodd"
+                />
+              </svg>
+
+              {/* BARS 4 icon */}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="size-6 swap-off"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M3 5.25a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 5.25Zm0 4.5A.75.75 0 0 1 3.75 9h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 9.75Zm0 4.5a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75a.75.75 0 0 1-.75-.75Zm0 4.5a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75a.75.75 0 0 1-.75-.75Z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </label>
+            <p className="text-xl">{viewStyleDisplayString}</p>
+          </div>
+          {/* <div className="flex flex-col justify-center gap-1 mt-4 md:justify-around md:flex-row lg:mt-0">
+          <input
+            className="h-12 pl-4 bg-secondary text-secondary-content"
+            placeholder="Search by chapter"
+            value={userSearchInput}
+            onChange={e => setUserSearchInput(e.target.value)}
+          ></input>
+          <button className="px-8 py-2 text-xl bg-primary" onClick={() => preQuery()}>
+            SEARCH
+          </button>
+        </div> */}
+        </div>
+
         <div className="flex justify-center gap-3 mb-3">
           <span className="my-auto text-lg">Page {pageNum + 1}</span>
           <select
@@ -80,18 +141,37 @@ export const GetVerses = () => {
           </button>
         </div>
 
-        {filteredVerseList.map(verse => (
-          <div key={verse.id.toString()} className="flex flex-row">
-            <ConfirmVerse
-              content={verse.verseContent}
-              chapterNum={verse.chapterNumber}
-              verseNum={verse.verseNumber}
-              verseId={verse.id}
-              confirmationCount={verse.confirmationCount}
-              numericalId={BigInt(verse.verseId)}
-            />
+        {isViewAllMode ? (
+          <div>
+            {data?.verses?.map(verse => (
+              <div key={verse.id.toString()} className="flex flex-row">
+                <ConfirmVerse
+                  content={verse.verseContent}
+                  chapterNum={verse.chapterNumber}
+                  verseNum={verse.verseNumber}
+                  verseId={verse.id}
+                  confirmationCount={verse.confirmationCount}
+                  numericalId={BigInt(verse.verseId)}
+                />
+              </div>
+            ))}
           </div>
-        ))}
+        ) : (
+          <div>
+            {filteredVerseList.map(verse => (
+              <div key={verse.id.toString()} className="flex flex-row">
+                <ConfirmVerse
+                  content={verse.verseContent}
+                  chapterNum={verse.chapterNumber}
+                  verseNum={verse.verseNumber}
+                  verseId={verse.id}
+                  confirmationCount={verse.confirmationCount}
+                  numericalId={BigInt(verse.verseId)}
+                />
+              </div>
+            ))}
+          </div>
+        )}
 
         <div className="flex justify-end gap-3 mx-5 mt-5">
           <button className="btn btn-sm" disabled={!pageNum} onClick={() => setPageNum(0)}>
