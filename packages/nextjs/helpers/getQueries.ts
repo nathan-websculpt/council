@@ -84,8 +84,7 @@ export const GQL_VERSES_For_Display_with_search = (searchInput: string) => {
 };
 
 //for the CONFIRMATION page
-//old, as of June 5th, 2024
-export const GQL_VERSES_For_Confirmation_OLD = () => {
+export const GQL_VERSES_For_Confirmation = () => {
   return gql`
     query ($limit: Int!, $offset: Int!) {
       verses(orderBy: verseId, orderDirection: asc, first: $limit, skip: $offset) {
@@ -95,28 +94,9 @@ export const GQL_VERSES_For_Confirmation_OLD = () => {
         verseNumber
         verseContent
         confirmationCount
-      }
-    }
-  `;
-};
-
-//for the CONFIRMATION page
-export const GQL_VERSES_For_Confirmation = () => {
-  return gql`
-    query ($limit: Int!, $offset: Int!, $userWalletAddress: String) {
-      verses(
-        where: { or: [{ confirmationCount: 0 }, { confirmations_: { confirmedBy_not: $userWalletAddress } }] }
-        orderBy: verseId
-        orderDirection: asc
-        first: $limit
-        skip: $offset
-      ) {
-        id
-        verseId
-        chapterNumber
-        verseNumber
-        verseContent
-        confirmationCount
+        confirmations {
+          confirmedBy
+        }
       }
     }
   `;

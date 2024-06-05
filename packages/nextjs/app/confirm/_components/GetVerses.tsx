@@ -1,20 +1,21 @@
 import { useEffect, useState } from "react";
 import { ConfirmVerse } from "./ConfirmVerse";
 import { useQuery } from "@apollo/client";
+import { useAccount } from "wagmi";
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 import { GQL_VERSES_For_Confirmation } from "~~/helpers/getQueries";
-import { useAccount } from "wagmi";
 
 export const GetVerses = () => {
   const userAccount = useAccount();
   const [pageSize, setPageSize] = useState(25);
   const [pageNum, setPageNum] = useState(0);
+  const [listOfConfirmedIDs, setListOfConfirmedIDs] = useState([]);
+  const [filteredVerseList, setFilteredVerseList] = useState([]);
 
   const { loading, error, data } = useQuery(GQL_VERSES_For_Confirmation(), {
     variables: {
       limit: pageSize,
       offset: pageNum * pageSize,
-      userWalletAddress: userAccount.address,
     },
     pollInterval: 6000,
   });
@@ -24,8 +25,30 @@ export const GetVerses = () => {
   }, [error]);
 
   useEffect(() => {
-    if (data !== undefined && data !== null) console.log("GQL_VERSES_For_Confirmation Query DATA: ", data);
+    if (data !== undefined && data !== null) {
+      console.log("GQL_VERSES_For_Confirmation Query DATA: ", data);
+
+      // filter to an array of JUST IDs that the user has already confirmed
+      // listOfConfirmedIDs
+      setListOfConfirmedIDs(
+        data?.verses
+          ?.filter(e => e.confirmations.some(a => a.confirmedBy.startsWith(userAccount.address?.toLowerCase())))
+          .map(e => e.id),
+      );
+    }
   }, [data]);
+
+  useEffect(() => {
+    if (listOfConfirmedIDs !== undefined && listOfConfirmedIDs !== null && listOfConfirmedIDs.length > 0) {
+      // filter confirmed verses OUT of the originally queried list
+      setFilteredVerseList(data?.verses?.filter(i => filterOutAlreadyConfirmed(i)));
+    }
+  }, [listOfConfirmedIDs]);
+
+  // used for filteredVerseList (a filter from the originally queried data)
+  const filterOutAlreadyConfirmed = item => {
+    return !listOfConfirmedIDs.includes(item.id);
+  };
 
   if (loading) {
     return (
@@ -57,7 +80,7 @@ export const GetVerses = () => {
           </button>
         </div>
 
-        {data?.verses?.map(verse => (
+        {filteredVerseList.map(verse => (
           <div key={verse.id.toString()} className="flex flex-row">
             <ConfirmVerse
               content={verse.verseContent}
