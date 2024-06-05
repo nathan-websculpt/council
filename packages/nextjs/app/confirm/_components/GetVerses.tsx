@@ -3,6 +3,7 @@ import { ConfirmVerse } from "./ConfirmVerse";
 import { useQuery } from "@apollo/client";
 import { useAccount } from "wagmi";
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
+import { getJohnMetaData } from "~~/helpers/JohnMeta";
 import { GQL_VERSES_For_Confirmation } from "~~/helpers/getQueries";
 
 export const GetVerses = () => {
@@ -13,6 +14,25 @@ export const GetVerses = () => {
   const [listOfConfirmedIDs, setListOfConfirmedIDs] = useState([]);
   const [filteredVerseList, setFilteredVerseList] = useState([]);
   const [isViewAllMode, setIsViewAllMode] = useState(false);
+
+  const metaData = getJohnMetaData();
+  const [versesList, setVersesList] = useState<number[]>([]);
+  const [selectedChapter, setSelectedChapter] = useState("Select Chapter");
+  const [selectedVerse, setSelectedVerse] = useState("Select Verse");
+
+  const changeChapter = e => {
+    setSelectedChapter(e.target.value.toString());
+    setVersesList(getJohnMetaData().find(x => x.ChapterNumber.toString() === e.target.value.toString()).Verses);
+    setSelectedVerse("Select Verse");
+  };
+
+  const changeVerse = e => {
+    setSelectedVerse(e.target.value.toString());
+  };
+
+  useEffect(() => {
+    if (selectedVerse !== undefined && selectedVerse !== null) console.log("SELECTED VERSE: ", selectedVerse);
+  }, [selectedVerse]);
 
   const { loading, error, data } = useQuery(GQL_VERSES_For_Confirmation(), {
     variables: {
@@ -42,7 +62,7 @@ export const GetVerses = () => {
 
   useEffect(() => {
     if (listOfConfirmedIDs !== undefined && listOfConfirmedIDs !== null && listOfConfirmedIDs.length > 0) {
-      // filter confirmed verses OUT of the originally queried list
+      // filter confirmed verses (listOfConfirmedIDs) OUT of the originally queried list
       setFilteredVerseList(data?.verses?.filter(i => filterOutAlreadyConfirmed(i)));
     }
   }, [listOfConfirmedIDs]);
@@ -107,17 +127,29 @@ export const GetVerses = () => {
             </label>
             <p className="text-xl">{viewStyleDisplayString}</p>
           </div>
-          {/* <div className="flex flex-col justify-center gap-1 mt-4 md:justify-around md:flex-row lg:mt-0">
-          <input
-            className="h-12 pl-4 bg-secondary text-secondary-content"
-            placeholder="Search by chapter"
-            value={userSearchInput}
-            onChange={e => setUserSearchInput(e.target.value)}
-          ></input>
-          <button className="px-8 py-2 text-xl bg-primary" onClick={() => preQuery()}>
-            SEARCH
-          </button>
-        </div> */}
+          <div className="flex flex-col justify-center gap-1 mt-4 md:justify-around md:flex-row lg:mt-0">
+            {metaData !== undefined && metaData !== null && (
+              <>
+                <select value={selectedChapter} onChange={changeChapter}>
+                  <option>Select Chapter</option>
+                  {metaData.map(md => (
+                    <option value={md.ChapterNumber}>{md.ChapterNumber}</option>
+                  ))}
+                </select>
+
+                {versesList !== undefined && versesList !== null && (
+                  <>
+                    <select value={selectedVerse} onChange={changeVerse}>
+                      <option>Select Verse</option>
+                      {versesList?.map(verse => (
+                        <option value={verse.VerseNumber}>{verse.VerseNumber}</option>
+                      ))}
+                    </select>
+                  </>
+                )}
+              </>
+            )}
+          </div>
         </div>
 
         <div className="flex justify-center gap-3 mb-3">
