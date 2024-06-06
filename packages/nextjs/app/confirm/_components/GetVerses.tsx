@@ -6,6 +6,14 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 import { getJohnMetaData } from "~~/helpers/JohnMeta";
 import { GQL_VERSES_For_Confirmation } from "~~/helpers/getQueries";
 
+// has three view modes
+//    1. Next-Up View
+//      a. shows the user's next verse to confirm
+//    2. View All
+//      a. shows all verses
+//    3. Cascading DDLs
+//      a. shows the single verse from selections off of 2 drop-down lists (chapter and verse)
+
 export const GetVerses = () => {
   const defaultChapterValue = "Select Chapter";
   const defaultVerseValue = "Select Verse";
@@ -29,6 +37,7 @@ export const GetVerses = () => {
   useEffect(() => {
     if (!isNaN(parseInt(selectedVerse) && !isViewAllMode)) {
       setIsViewAllMode(true);
+      setPageNum(0); //TODO: this causes a double-call to preQuery/doQuery; doesn't break, just inefficient.
       return;
     }
 
@@ -39,8 +48,9 @@ export const GetVerses = () => {
     if (isViewAllMode) setViewStyleDisplayString("View All");
     else {
       setViewStyleDisplayString("Next-Up View");
-      setSelectedVerse(defaultVerseValue);
       setSelectedChapter(defaultChapterValue);
+      setSelectedVerse(defaultVerseValue);
+      setVersesList([]);
     }
   }, [isViewAllMode]);
 
@@ -49,7 +59,7 @@ export const GetVerses = () => {
   }, [pageSize, pageNum, selectedVerse]);
 
   const preQuery = async () => {
-    console.log("selected verse isNaN:", isNaN(parseInt(selectedVerse)));
+    console.log("running preQuery");
     if (!isNaN(parseInt(selectedVerse))) {
       doQuery({
         limit: pageSize,
@@ -197,16 +207,16 @@ export const GetVerses = () => {
                   ))}
                 </select>
 
-                {versesList !== undefined && versesList !== null && (
-                  <>
-                    <select value={selectedVerse} onChange={changeVerse}>
-                      <option>{defaultVerseValue}</option>
+                <select value={selectedVerse} onChange={changeVerse}>
+                  <option>{defaultVerseValue}</option>
+                  {versesList !== undefined && versesList !== null && (
+                    <>
                       {versesList?.map(verse => (
                         <option value={verse.VerseNumber}>{verse.VerseNumber}</option>
                       ))}
-                    </select>
-                  </>
-                )}
+                    </>
+                  )}
+                </select>
               </>
             )}
           </div>
