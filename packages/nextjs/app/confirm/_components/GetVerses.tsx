@@ -7,6 +7,8 @@ import { getJohnMetaData } from "~~/helpers/JohnMeta";
 import { GQL_VERSES_For_Confirmation } from "~~/helpers/getQueries";
 
 export const GetVerses = () => {
+  const defaultChapterValue = "Select Chapter";
+  const defaultVerseValue = "Select Verse";
   const client = useApolloClient();
   const userAccount = useAccount();
   const [viewStyleDisplayString, setViewStyleDisplayString] = useState("Next-Up View");
@@ -16,8 +18,8 @@ export const GetVerses = () => {
 
   const metaData = getJohnMetaData();
   const [versesList, setVersesList] = useState<number[]>([]);
-  const [selectedChapter, setSelectedChapter] = useState("Select Chapter");
-  const [selectedVerse, setSelectedVerse] = useState("Select Verse");
+  const [selectedChapter, setSelectedChapter] = useState(defaultChapterValue);
+  const [selectedVerse, setSelectedVerse] = useState(defaultVerseValue);
 
   const [pageSize, setPageSize] = useState(25);
   const [pageNum, setPageNum] = useState(0);
@@ -25,11 +27,29 @@ export const GetVerses = () => {
   const [queryLoading, setQueryLoading] = useState(false);
 
   useEffect(() => {
+    if (!isNaN(parseInt(selectedVerse) && !isViewAllMode)) {
+      setIsViewAllMode(true);
+      return;
+    }
+
+    if (isNaN(parseInt(selectedVerse) && isViewAllMode)) setIsViewAllMode(false);
+  }, [selectedVerse]);
+
+  useEffect(() => {
+    if (isViewAllMode) setViewStyleDisplayString("View All");
+    else {
+      setViewStyleDisplayString("Next-Up View");
+      setSelectedVerse(defaultVerseValue);
+      setSelectedChapter(defaultChapterValue);
+    }
+  }, [isViewAllMode]);
+
+  useEffect(() => {
     preQuery();
   }, [pageSize, pageNum, selectedVerse]);
 
   const preQuery = async () => {
-    console.log("selected verse isNaN:",isNaN(parseInt(selectedVerse)));
+    console.log("selected verse isNaN:", isNaN(parseInt(selectedVerse)));
     if (!isNaN(parseInt(selectedVerse))) {
       doQuery({
         limit: pageSize,
@@ -65,7 +85,7 @@ export const GetVerses = () => {
   const changeChapter = e => {
     setSelectedChapter(e.target.value.toString());
     setVersesList(getJohnMetaData().find(x => x.ChapterNumber.toString() === e.target.value.toString())?.Verses);
-    setSelectedVerse("Select Verse");
+    setSelectedVerse(defaultVerseValue);
   };
 
   const changeVerse = e => {
@@ -100,14 +120,9 @@ export const GetVerses = () => {
     return !listOfConfirmedIDs.includes(item.id);
   };
 
-  const handleToggle = () => {
+  const setViewMode = () => {
     setIsViewAllMode(!isViewAllMode);
   };
-
-  useEffect(() => {
-    if (isViewAllMode) setViewStyleDisplayString("View All");
-    else setViewStyleDisplayString("Next-Up View");
-  }, [isViewAllMode]);
 
   if (queryLoading) {
     return (
@@ -120,46 +135,63 @@ export const GetVerses = () => {
       <>
         <div className="flex flex-col items-center justify-center gap-1 mb-12 lg:justify-between lg:flex-row lg:px-12">
           <div className="flex flex-row gap-4 place-items-center">
-            <label className="btn btn-circle btn-primary hover:btn-neutral swap swap-rotate">
-              {/* this hidden checkbox controls the state */}
-              <input type="checkbox" onChange={handleToggle} checked={isViewAllMode} />
+            {Number.isNaN(parseInt(selectedVerse)) ? (
+              <>
+                <label className="btn btn-circle btn-primary hover:btn-neutral swap swap-rotate">
+                  {/* this hidden checkbox controls the state */}
+                  <input type="checkbox" onChange={setViewMode} checked={isViewAllMode} />
 
-              {/* icons from: https://heroicons.com/solid */}
-              {/* BARS 2 icon */}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                className="size-6 swap-on"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M3 9a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 9Zm0 6.75a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75a.75.75 0 0 1-.75-.75Z"
-                  clipRule="evenodd"
-                />
-              </svg>
+                  {/* icons from: https://heroicons.com/solid */}
+                  {/* BARS 2 icon */}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="size-6 swap-on"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M3 9a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 9Zm0 6.75a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75a.75.75 0 0 1-.75-.75Z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
 
-              {/* BARS 4 icon */}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                className="size-6 swap-off"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M3 5.25a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 5.25Zm0 4.5A.75.75 0 0 1 3.75 9h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 9.75Zm0 4.5a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75a.75.75 0 0 1-.75-.75Zm0 4.5a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75a.75.75 0 0 1-.75-.75Z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </label>
-            <p className="text-xl">{viewStyleDisplayString}</p>
+                  {/* BARS 4 icon */}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="size-6 swap-off"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M3 5.25a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 5.25Zm0 4.5A.75.75 0 0 1 3.75 9h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 9.75Zm0 4.5a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75a.75.75 0 0 1-.75-.75Zm0 4.5a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75a.75.75 0 0 1-.75-.75Z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </label>
+                <p className="text-xl">{viewStyleDisplayString}</p>
+              </>
+            ) : (
+              <>
+                <button onClick={() => setIsViewAllMode(false)} className="btn btn-circle btn-primary">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
+                    <path
+                      fillRule="evenodd"
+                      d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-1.72 6.97a.75.75 0 1 0-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 1 0 1.06 1.06L12 13.06l1.72 1.72a.75.75 0 1 0 1.06-1.06L13.06 12l1.72-1.72a.75.75 0 1 0-1.06-1.06L12 10.94l-1.72-1.72Z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </button>
+                <p className="text-xl">Clear Results</p>
+              </>
+            )}
           </div>
           <div className="flex flex-col justify-center gap-1 mt-4 md:justify-around md:flex-row lg:mt-0">
             {metaData !== undefined && metaData !== null && (
               <>
                 <select value={selectedChapter} onChange={changeChapter}>
-                  <option>Select Chapter</option>
+                  <option>{defaultChapterValue}</option>
                   {metaData.map(md => (
                     <option value={md.ChapterNumber}>{md.ChapterNumber}</option>
                   ))}
@@ -168,7 +200,7 @@ export const GetVerses = () => {
                 {versesList !== undefined && versesList !== null && (
                   <>
                     <select value={selectedVerse} onChange={changeVerse}>
-                      <option>Select Verse</option>
+                      <option>{defaultVerseValue}</option>
                       {versesList?.map(verse => (
                         <option value={verse.VerseNumber}>{verse.VerseNumber}</option>
                       ))}
