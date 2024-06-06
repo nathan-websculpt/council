@@ -1,16 +1,15 @@
 import { useEffect, useState } from "react";
 import { ConfirmVerse } from "./ConfirmVerse";
-import { useQuery } from "@apollo/client";
+import { useApolloClient } from "@apollo/client";
 import { useAccount } from "wagmi";
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 import { getJohnMetaData } from "~~/helpers/JohnMeta";
 import { GQL_VERSES_For_Confirmation } from "~~/helpers/getQueries";
 
 export const GetVerses = () => {
+  const client = useApolloClient();
   const userAccount = useAccount();
   const [viewStyleDisplayString, setViewStyleDisplayString] = useState("Next-Up View");
-  const [pageSize, setPageSize] = useState(25);
-  const [pageNum, setPageNum] = useState(0);
   const [listOfConfirmedIDs, setListOfConfirmedIDs] = useState([]);
   const [filteredVerseList, setFilteredVerseList] = useState([]);
   const [isViewAllMode, setIsViewAllMode] = useState(false);
@@ -20,33 +19,58 @@ export const GetVerses = () => {
   const [selectedChapter, setSelectedChapter] = useState("Select Chapter");
   const [selectedVerse, setSelectedVerse] = useState("Select Verse");
 
+  const [pageSize, setPageSize] = useState(25);
+  const [pageNum, setPageNum] = useState(0);
+  const [data, setData] = useState({});
+  const [queryLoading, setQueryLoading] = useState(false);
+
+  useEffect(() => {
+    preQuery();
+  }, [pageSize, pageNum, selectedVerse]);
+
+  const preQuery = async () => {
+    console.log("selected verse isNaN:",isNaN(parseInt(selectedVerse)));
+    if (!isNaN(parseInt(selectedVerse))) {
+      doQuery({
+        limit: pageSize,
+        offset: pageNum * pageSize,
+        searchByChapter: parseInt(selectedChapter),
+        searchByVerse: parseInt(selectedVerse),
+      });
+    } else {
+      doQuery({
+        limit: pageSize,
+        offset: pageNum * pageSize,
+      });
+    }
+  };
+
+  const doQuery = async (options: object) => {
+    setQueryLoading(true);
+    await client
+      .query({
+        query: GQL_VERSES_For_Confirmation(selectedChapter, selectedVerse),
+        variables: options,
+        fetchPolicy: "no-cache",
+      })
+      .then(d => {
+        setData(d.data);
+      })
+      .catch(e => {
+        console.log("GQL_VERSES_For_Confirmation QUERY ERROR: ", e);
+      });
+    setQueryLoading(false);
+  };
+
   const changeChapter = e => {
     setSelectedChapter(e.target.value.toString());
-    setVersesList(getJohnMetaData().find(x => x.ChapterNumber.toString() === e.target.value.toString()).Verses);
+    setVersesList(getJohnMetaData().find(x => x.ChapterNumber.toString() === e.target.value.toString())?.Verses);
     setSelectedVerse("Select Verse");
   };
 
   const changeVerse = e => {
     setSelectedVerse(e.target.value.toString());
   };
-
-  useEffect(() => {
-    if (selectedVerse !== undefined && selectedVerse !== null) {
-      console.log("SELECTED VERSE: ", selectedVerse);
-    }
-  }, [selectedVerse]);
-
-  const { loading, error, data } = useQuery(GQL_VERSES_For_Confirmation(), {
-    variables: {
-      limit: pageSize,
-      offset: pageNum * pageSize,
-    },
-    pollInterval: 6000,
-  });
-
-  useEffect(() => {
-    if (error !== undefined && error !== null) console.log("GQL_VERSES_For_Confirmation Query Error: ", error);
-  }, [error]);
 
   useEffect(() => {
     if (data !== undefined && data !== null) {
@@ -85,7 +109,7 @@ export const GetVerses = () => {
     else setViewStyleDisplayString("Next-Up View");
   }, [isViewAllMode]);
 
-  if (loading) {
+  if (queryLoading) {
     return (
       <div className="flex flex-col items-center gap-2 p-2 m-4 mx-auto border shadow-xl border-base-300 bg-base-200 sm:rounded-lg">
         <span className="loading loading-spinner loading-lg"></span>
@@ -194,7 +218,7 @@ export const GetVerses = () => {
           </div>
         ) : (
           <div>
-            {filteredVerseList.map(verse => (
+            {filteredVerseList?.map(verse => (
               <div key={verse.id.toString()} className="flex flex-row">
                 <ConfirmVerse
                   content={verse.verseContent}

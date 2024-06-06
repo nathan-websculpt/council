@@ -84,8 +84,8 @@ export const GQL_VERSES_For_Display_with_search = (searchInput: string) => {
 };
 
 //for the CONFIRMATION page
-export const GQL_VERSES_For_Confirmation = (chapterInput: number, verseInput: number) => {
-  if (verseInput === undefined || verseInput === null)
+export const GQL_VERSES_For_Confirmation = (chapterInput: string, verseInput: string) => {
+  if (verseInput === undefined || verseInput === null || isNaN(parseInt(verseInput)))
     return gql`
       query ($limit: Int!, $offset: Int!) {
         verses(orderBy: verseId, orderDirection: asc, first: $limit, skip: $offset) {
@@ -103,9 +103,9 @@ export const GQL_VERSES_For_Confirmation = (chapterInput: number, verseInput: nu
     `;
   else
     return gql`
-      query ($limit: Int!, $offset: Int!) {
+      query ($limit: Int!, $offset: Int!, $searchByChapter: Int!, $searchByVerse: Int!) {
         verses(
-          where: { and: [{ chapterNumber: chapterInput }, { verseNumber: verseInput }] }
+          where: { and: [{ chapterNumber: $searchByChapter }, { verseNumber: $searchByVerse }] }
           orderBy: verseId
           orderDirection: asc
           first: $limit
