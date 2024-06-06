@@ -30,6 +30,7 @@ export const GetVerses = () => {
 
   const metaData = getJohnMetaData();
   const [versesList, setVersesList] = useState<number[]>([]);
+  const [previousSelectedChapter, setPreviousSelectedChapter] = useState(defaultChapterValue);
   const [selectedChapter, setSelectedChapter] = useState(defaultChapterValue);
   const [selectedVerse, setSelectedVerse] = useState(defaultVerseValue);
 
@@ -41,14 +42,21 @@ export const GetVerses = () => {
   const [readyToPoll, setReadyToPoll] = useState(false);
 
   useEffect(() => {
+    setPreviousSelectedChapter(selectedChapter);
+  }, [selectedChapter]);
+
+  useEffect(() => {
     if (!isNaN(parseInt(selectedVerse) && !isViewAllMode)) {
       setIsViewAllMode(true);
       setPageNum(0); //TODO: this causes a double-call to preQuery/doQuery; doesn't break, just inefficient.
       return;
     }
 
+    // if the previously selected chapter was also a number (user is swapping chapters in ddl [eg: changing from 1 to 3])
+    if (!isNaN(parseInt(previousSelectedChapter)) && !isNaN(parseInt(selectedChapter))) return;
+
     if (isNaN(parseInt(selectedVerse) && isViewAllMode)) setIsViewAllMode(false);
-  }, [selectedVerse]);
+  }, [selectedVerse, selectedChapter]);
 
   useEffect(() => {
     if (isViewAllMode) setViewStyleDisplayString("View All");
@@ -67,7 +75,6 @@ export const GetVerses = () => {
   }, [pageSize, pageNum, selectedVerse]);
 
   const preQuery = async () => {
-    console.log("running preQuery");
     if (!isNaN(parseInt(selectedVerse))) {
       doQuery({
         limit: pageSize,
@@ -110,7 +117,7 @@ export const GetVerses = () => {
 
   useEffect(() => {
     if (data !== undefined && data !== null) {
-      console.log("GQL_VERSES_For_Confirmation Query DATA: ", data);
+      // console.log("GQL_VERSES_For_Confirmation Query DATA: ", data);
 
       // filter to an array of JUST IDs that the user has already confirmed
       // listOfConfirmedIDs
@@ -207,7 +214,7 @@ export const GetVerses = () => {
               <select className="px-6 py-2 mr-4 bg-primary" value={selectedChapter} onChange={changeChapter}>
                 <option>{defaultChapterValue}</option>
                 {metaData.map(md => (
-                  <option value={md.ChapterNumber}>{md.ChapterNumber}</option>
+                  <option key={md.ChapterNumber.toString() + md.Verses.length.toString()} value={md.ChapterNumber}>{md.ChapterNumber}</option>
                 ))}
               </select>
 
@@ -216,7 +223,7 @@ export const GetVerses = () => {
                 {versesList !== undefined && versesList !== null && (
                   <>
                     {versesList?.map(verse => (
-                      <option value={verse.VerseNumber}>{verse.VerseNumber}</option>
+                      <option key={verse.VerseNumber} value={verse.VerseNumber}>{verse.VerseNumber}</option>
                     ))}
                   </>
                 )}
