@@ -24,7 +24,7 @@ const deployJohn: DeployFunction = async function (hre: HardhatRuntimeEnvironmen
   // const owner = "0x1e7aAbB9D0C701208E875131d0A1cFcDAba79350"; //PROD WALLET
   const owner = "0xf0ADAE0823444d70Eb5826F3C26b3704611c759A"; //todo change to fe wallet
 
-  const council = ["0xf0ADAE0823444d70Eb5826F3C26b3704611c759A", "0xD60dB4d4aDaFa8cB8fFC48c49F9Cf17229AA72B9"];
+  const council = ["0xf0ADAE0823444d70Eb5826F3C26b3704611c759A", "0x629635FEE9e7AA9432f05d6eE817A30844184311"];
 
   await deploy("John", {
     from: deployer,
