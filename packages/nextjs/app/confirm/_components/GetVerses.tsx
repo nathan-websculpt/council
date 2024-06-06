@@ -31,7 +31,9 @@ export const GetVerses = () => {
   };
 
   useEffect(() => {
-    if (selectedVerse !== undefined && selectedVerse !== null) console.log("SELECTED VERSE: ", selectedVerse);
+    if (selectedVerse !== undefined && selectedVerse !== null) {
+      console.log("SELECTED VERSE: ", selectedVerse);
+    }
   }, [selectedVerse]);
 
   const { loading, error, data } = useQuery(GQL_VERSES_For_Confirmation(), {
@@ -64,6 +66,8 @@ export const GetVerses = () => {
     if (listOfConfirmedIDs !== undefined && listOfConfirmedIDs !== null && listOfConfirmedIDs.length > 0) {
       // filter confirmed verses (listOfConfirmedIDs) OUT of the originally queried list
       setFilteredVerseList(data?.verses?.filter(i => filterOutAlreadyConfirmed(i)));
+    } else {
+      setFilteredVerseList(data?.verses);
     }
   }, [listOfConfirmedIDs]);
 

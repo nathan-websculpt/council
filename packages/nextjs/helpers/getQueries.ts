@@ -84,22 +84,45 @@ export const GQL_VERSES_For_Display_with_search = (searchInput: string) => {
 };
 
 //for the CONFIRMATION page
-export const GQL_VERSES_For_Confirmation = () => {
-  return gql`
-    query ($limit: Int!, $offset: Int!) {
-      verses(orderBy: verseId, orderDirection: asc, first: $limit, skip: $offset) {
-        id
-        verseId
-        chapterNumber
-        verseNumber
-        verseContent
-        confirmationCount
-        confirmations {
-          confirmedBy
+export const GQL_VERSES_For_Confirmation = (chapterInput: number, verseInput: number) => {
+  if (verseInput === undefined || verseInput === null)
+    return gql`
+      query ($limit: Int!, $offset: Int!) {
+        verses(orderBy: verseId, orderDirection: asc, first: $limit, skip: $offset) {
+          id
+          verseId
+          chapterNumber
+          verseNumber
+          verseContent
+          confirmationCount
+          confirmations {
+            confirmedBy
+          }
         }
       }
-    }
-  `;
+    `;
+  else
+    return gql`
+      query ($limit: Int!, $offset: Int!) {
+        verses(
+          where: { and: [{ chapterNumber: chapterInput }, { verseNumber: verseInput }] }
+          orderBy: verseId
+          orderDirection: asc
+          first: $limit
+          skip: $offset
+        ) {
+          id
+          verseId
+          chapterNumber
+          verseNumber
+          verseContent
+          confirmationCount
+          confirmations {
+            confirmedBy
+          }
+        }
+      }
+    `;
 };
 
 //for the FULLY CONFIRMED page
