@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { ConfirmVerse } from "./ConfirmVerse";
 import { useApolloClient } from "@apollo/client";
+import { useInterval } from "usehooks-ts";
 import { useAccount } from "wagmi";
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 import { getJohnMetaData } from "~~/helpers/JohnMeta";
@@ -17,8 +18,11 @@ import { GQL_VERSES_For_Confirmation } from "~~/helpers/getQueries";
 export const GetVerses = () => {
   const defaultChapterValue = "Select Chapter";
   const defaultVerseValue = "Select Verse";
+  const REFRESH_INTERVAL = 2000; //PRODTODO: 6000
+
   const client = useApolloClient();
   const userAccount = useAccount();
+
   const [viewStyleDisplayString, setViewStyleDisplayString] = useState("Next-Up View");
   const [listOfConfirmedIDs, setListOfConfirmedIDs] = useState([]);
   const [filteredVerseList, setFilteredVerseList] = useState([]);
@@ -33,6 +37,8 @@ export const GetVerses = () => {
   const [pageNum, setPageNum] = useState(0);
   const [data, setData] = useState({});
   const [queryLoading, setQueryLoading] = useState(false);
+
+  const [readyToPoll, setReadyToPoll] = useState(false);
 
   useEffect(() => {
     if (!isNaN(parseInt(selectedVerse) && !isViewAllMode)) {
@@ -134,6 +140,11 @@ export const GetVerses = () => {
     setIsViewAllMode(!isViewAllMode);
   };
 
+  // useInterval(() => {
+  //   if (readyToPoll) preQuery();
+  //   else setReadyToPoll(true);
+  // }, REFRESH_INTERVAL);
+
   if (queryLoading) {
     return (
       <div className="flex flex-col items-center gap-2 p-2 m-4 mx-auto border shadow-xl border-base-300 bg-base-200 sm:rounded-lg">
@@ -143,6 +154,11 @@ export const GetVerses = () => {
   } else {
     return (
       <>
+        {/* TODO:remove div */}
+        <div>
+          <p className="text-xl">dev note: not a polling query; will not refresh;</p>
+        </div>
+        {/* TODO:^^^ remove div */}
         <div className="flex flex-col items-center justify-center gap-1 mb-12 lg:justify-between lg:flex-row lg:px-12">
           <div className="flex flex-row gap-4 place-items-center">
             {Number.isNaN(parseInt(selectedVerse)) ? (
