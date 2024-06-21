@@ -16,11 +16,35 @@ export const GQL_VERSES_For_Display = () => {
 };
 
 //for the READ page (after done uploading book - can search by chapter)
-export const GQL_VERSES_For_Display_search_by_chapter = (searchInput: string) => {
-  if (searchInput.trim().length === 0)
+export const GQL_VERSES_For_Display_search_by_chapter = (chapterNumberInput: string, verseNumberInput: string) => {
+  if (chapterNumberInput.trim().length !== 0 && verseNumberInput.trim().length !== 0)
     return gql`
-      query ($limit: Int!, $offset: Int!) {
-        verses(orderBy: verseId, orderDirection: asc, first: $limit, skip: $offset) {
+      query ($limit: Int!, $offset: Int!, $searchByChapterNumber: String, $searchByVerseNumber: String) {
+        verses(
+          where: { and: [{ chapterNumber_gte: $searchByChapterNumber }, { verseNumber_gte: $searchByVerseNumber }] }
+          orderBy: verseId
+          orderDirection: asc
+          first: $limit
+          skip: $offset
+        ) {
+          id
+          verseId
+          chapterNumber
+          verseNumber
+          verseContent
+        }
+      }
+    `;
+  else if (chapterNumberInput.trim().length !== 0)
+    return gql`
+      query ($limit: Int!, $offset: Int!, $searchByChapterNumber: String) {
+        verses(
+          where: { chapterNumber_gte: $searchByChapterNumber }
+          orderBy: verseId
+          orderDirection: asc
+          first: $limit
+          skip: $offset
+        ) {
           id
           verseId
           chapterNumber
@@ -31,14 +55,8 @@ export const GQL_VERSES_For_Display_search_by_chapter = (searchInput: string) =>
     `;
   else
     return gql`
-      query ($limit: Int!, $offset: Int!, $searchBy: String) {
-        verses(
-          where: { chapterNumber_gte: $searchBy }
-          orderBy: verseId
-          orderDirection: asc
-          first: $limit
-          skip: $offset
-        ) {
+      query ($limit: Int!, $offset: Int!) {
+        verses(orderBy: verseId, orderDirection: asc, first: $limit, skip: $offset) {
           id
           verseId
           chapterNumber
@@ -85,7 +103,7 @@ export const GQL_VERSES_For_Display_with_search = (searchInput: string) => {
 
 //for the CONFIRMATION page
 export const GQL_VERSES_For_Confirmation = (chapterInput: string, verseInput: string) => {
-  if (verseInput === undefined || verseInput === null || isNaN(parseInt(verseInput)))
+  if (verseInput === undefined || verseInput === null || isNaN(verseInput))
     return gql`
       query ($limit: Int!, $offset: Int!) {
         verses(orderBy: verseId, orderDirection: asc, first: $limit, skip: $offset) {

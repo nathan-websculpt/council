@@ -15,6 +15,10 @@ import { GQL_VERSES_For_Confirmation } from "~~/helpers/getQueries";
 //    3. Cascading DDLs
 //      a. shows the single verse from selections off of 2 drop-down lists (chapter and verse)
 
+// NOTE:
+// isViewAllMode means you are reading from "data"
+// !isViewAllMode means you are reading from "filteredVerseList"
+
 export const GetVerses = () => {
   const defaultChapterValue = "Select Chapter";
   const defaultVerseValue = "Select Verse";
@@ -46,16 +50,15 @@ export const GetVerses = () => {
   }, [selectedChapter]);
 
   useEffect(() => {
-    if (!isNaN(parseInt(selectedVerse) && !isViewAllMode)) {
+    if (!isNaN(selectedVerse) && !isViewAllMode) {
       setIsViewAllMode(true);
       setPageNum(0); //TODO: this causes a double-call to preQuery/doQuery; doesn't break, just inefficient.
       return;
     }
-
     // if the previously selected chapter was also a number (user is swapping chapters in ddl [eg: changing from 1 to 3])
-    if (!isNaN(parseInt(previousSelectedChapter)) && !isNaN(parseInt(selectedChapter))) return;
+    if (!isNaN(previousSelectedChapter) && !isNaN(selectedChapter)) return;
 
-    if (isNaN(parseInt(selectedVerse) && isViewAllMode)) setIsViewAllMode(false);
+    if (isNaN(selectedVerse) && isNaN(selectedChapter) && isViewAllMode) setIsViewAllMode(false);
   }, [selectedVerse, selectedChapter]);
 
   useEffect(() => {
@@ -75,7 +78,7 @@ export const GetVerses = () => {
   }, [pageSize, pageNum, selectedVerse]);
 
   const preQuery = async () => {
-    if (!isNaN(parseInt(selectedVerse))) {
+    if (!isNaN(selectedVerse)) {
       doQuery({
         limit: pageSize,
         offset: pageNum * pageSize,
@@ -214,7 +217,9 @@ export const GetVerses = () => {
               <select className="px-6 py-2 mr-4 bg-primary" value={selectedChapter} onChange={changeChapter}>
                 <option>{defaultChapterValue}</option>
                 {metaData.map(md => (
-                  <option key={md.ChapterNumber.toString() + md.Verses.length.toString()} value={md.ChapterNumber}>{md.ChapterNumber}</option>
+                  <option key={md.ChapterNumber.toString() + md.Verses.length.toString()} value={md.ChapterNumber}>
+                    {md.ChapterNumber}
+                  </option>
                 ))}
               </select>
 
@@ -223,7 +228,9 @@ export const GetVerses = () => {
                 {versesList !== undefined && versesList !== null && (
                   <>
                     {versesList?.map(verse => (
-                      <option key={verse.VerseNumber} value={verse.VerseNumber}>{verse.VerseNumber}</option>
+                      <option key={verse.VerseNumber} value={verse.VerseNumber}>
+                        {verse.VerseNumber}
+                      </option>
                     ))}
                   </>
                 )}

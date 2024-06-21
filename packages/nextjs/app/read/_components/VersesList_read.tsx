@@ -1,13 +1,22 @@
 import { useEffect, useState } from "react";
 import { useApolloClient } from "@apollo/client";
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
+import { getJohnMetaData } from "~~/helpers/JohnMeta";
 import { GQL_VERSES_For_Display_search_by_chapter } from "~~/helpers/getQueries";
 import { notification } from "~~/utils/scaffold-eth";
 
 export const VersesList_Read = () => {
   const client = useApolloClient();
   const [viewStyleDisplayString, setViewStyleDisplayString] = useState("List View");
-  const [userSearchInput, setUserSearchInput] = useState("");
+
+  const defaultChapterValue = "Select Chapter";
+  const defaultVerseValue = "Select Verse";
+  const metaData = getJohnMetaData();
+  const [versesList, setVersesList] = useState<number[]>([]);
+  const [previousSelectedChapter, setPreviousSelectedChapter] = useState(defaultChapterValue);
+  const [selectedChapter, setSelectedChapter] = useState(defaultChapterValue);
+  const [selectedVerse, setSelectedVerse] = useState(defaultVerseValue);
+
   const [isListMode, setIsListMode] = useState(true);
   const [pageSize, setPageSize] = useState(25);
   const [pageNum, setPageNum] = useState(0);
@@ -15,8 +24,10 @@ export const VersesList_Read = () => {
   const [queryLoading, setQueryLoading] = useState(false);
 
   useEffect(() => {
+    setQueryLoading(true);
     preQuery();
-  }, [pageSize, pageNum]);
+    setQueryLoading(false);
+  }, [pageSize, pageNum, selectedVerse]);
 
   useEffect(() => {
     if (isListMode) setViewStyleDisplayString("List View");
@@ -24,25 +35,27 @@ export const VersesList_Read = () => {
   }, [isListMode]);
 
   const preQuery = async () => {
-    if (userSearchInput.trim().length === 0) {
+    if (isNaN(selectedChapter) && isNaN(selectedVerse)) {
       doQuery({
         limit: pageSize,
         offset: pageNum * pageSize,
       });
+    } else if (isNaN(selectedVerse)) {
+      doQuery({
+        limit: pageSize,
+        offset: pageNum * pageSize,
+        chapterNumberInput: selectedChapter,
+        searchByChapterNumber: selectedChapter,
+      });
     } else {
-      if (isNaN(+userSearchInput)) {
-        notification.warning("Please input a valid Chapter Number");
-      } else {
-        if (+userSearchInput > 21 || +userSearchInput < 1) {
-          notification.warning("There are only 21 Chapters");
-        } else {
-          doQuery({
-            limit: pageSize,
-            offset: pageNum * pageSize,
-            searchBy: userSearchInput,
-          });
-        }
-      }
+      doQuery({
+        limit: pageSize,
+        offset: pageNum * pageSize,
+        chapterNumberInput: selectedChapter,
+        verseNumberInput: selectedVerse,
+        searchByChapterNumber: selectedChapter,
+        searchByVerseNumber: selectedVerse,
+      });
     }
   };
 
@@ -53,9 +66,11 @@ export const VersesList_Read = () => {
   //     - then, the filtering of the data via the Search Bar
   const doQuery = async (options: object) => {
     setQueryLoading(true);
+    const thisChapterQuery = isNaN(selectedChapter) ? "" : selectedChapter;
+    const thisVerseQuery = isNaN(selectedVerse) ? "" : selectedVerse;
     await client
       .query({
-        query: GQL_VERSES_For_Display_search_by_chapter(userSearchInput),
+        query: GQL_VERSES_For_Display_search_by_chapter(thisChapterQuery, thisVerseQuery),
         variables: options,
         fetchPolicy: "no-cache",
       })
@@ -66,6 +81,16 @@ export const VersesList_Read = () => {
         console.log("QUERY ERROR: ", e);
       });
     setQueryLoading(false);
+  };
+
+  const changeChapter = e => {
+    setSelectedChapter(e.target.value.toString());
+    setVersesList(getJohnMetaData().find(x => x.ChapterNumber.toString() === e.target.value.toString())?.Verses);
+    setSelectedVerse(defaultVerseValue);
+  };
+
+  const changeVerse = e => {
+    setSelectedVerse(e.target.value.toString());
   };
 
   const handleToggle = () => {
@@ -123,14 +148,33 @@ export const VersesList_Read = () => {
           <p className="text-xl">{viewStyleDisplayString}</p>
         </div>
         <div className="flex flex-col justify-center gap-1 mt-4 md:justify-around md:flex-row lg:mt-0">
-          <input
-            className="h-12 pl-4 bg-secondary text-secondary-content"
-            placeholder="Search by chapter"
-            value={userSearchInput}
-            onChange={e => setUserSearchInput(e.target.value)}
-          ></input>
+          {metaData !== undefined && metaData !== null && (
+            <>
+              <select className="px-6 py-2 mr-2 bg-primary" value={selectedChapter} onChange={changeChapter}>
+                <option>{defaultChapterValue}</option>
+                {metaData.map(md => (
+                  <option key={md.ChapterNumber.toString() + md.Verses.length.toString()} value={md.ChapterNumber}>
+                    {md.ChapterNumber}
+                  </option>
+                ))}
+              </select>
+
+              <select className="px-6 py-2 mr-4 bg-primary" value={selectedVerse} onChange={changeVerse}>
+                <option>{defaultVerseValue}</option>
+                {versesList !== undefined && versesList !== null && (
+                  <>
+                    {versesList?.map(verse => (
+                      <option key={verse.VerseNumber} value={verse.VerseNumber}>
+                        {verse.VerseNumber}
+                      </option>
+                    ))}
+                  </>
+                )}
+              </select>
+            </>
+          )}
           <button className="px-8 py-2 text-xl bg-primary" onClick={() => preQuery()}>
-            SEARCH
+            GET
           </button>
         </div>
       </div>
