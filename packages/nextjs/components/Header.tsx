@@ -44,6 +44,10 @@ export const menuLinks: HeaderMenuLink[] = [
     href: "/debug",
   },
   {
+    label: "Test Contract",
+    href: "/onchain-test",
+  },
+  {
     label: "About",
     href: "/about",
   },

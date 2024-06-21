@@ -154,6 +154,28 @@ export class John__getLastVerseAddedResultValue0Struct extends ethereum.Tuple {
   }
 }
 
+export class John__getVerseByNumberResultValue0Struct extends ethereum.Tuple {
+  get verseId(): BigInt {
+    return this[0].toBigInt();
+  }
+
+  get verseNumber(): BigInt {
+    return this[1].toBigInt();
+  }
+
+  get chapterNumber(): BigInt {
+    return this[2].toBigInt();
+  }
+
+  get verseContent(): string {
+    return this[3].toString();
+  }
+
+  get confirmed(): boolean {
+    return this[4].toBoolean();
+  }
+}
+
 export class John__versesResult {
   value0: BigInt;
   value1: BigInt;
@@ -311,6 +333,37 @@ export class John extends ethereum.SmartContract {
     let value = result.value;
     return ethereum.CallResult.fromValue(
       changetype<John__getLastVerseAddedResultValue0Struct>(value[0].toTuple())
+    );
+  }
+
+  getVerseByNumber(
+    _numericalId: BigInt
+  ): John__getVerseByNumberResultValue0Struct {
+    let result = super.call(
+      "getVerseByNumber",
+      "getVerseByNumber(uint256):((uint256,uint256,uint256,string,bool))",
+      [ethereum.Value.fromUnsignedBigInt(_numericalId)]
+    );
+
+    return changetype<John__getVerseByNumberResultValue0Struct>(
+      result[0].toTuple()
+    );
+  }
+
+  try_getVerseByNumber(
+    _numericalId: BigInt
+  ): ethereum.CallResult<John__getVerseByNumberResultValue0Struct> {
+    let result = super.tryCall(
+      "getVerseByNumber",
+      "getVerseByNumber(uint256):((uint256,uint256,uint256,string,bool))",
+      [ethereum.Value.fromUnsignedBigInt(_numericalId)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(
+      changetype<John__getVerseByNumberResultValue0Struct>(value[0].toTuple())
     );
   }
 

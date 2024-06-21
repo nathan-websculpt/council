@@ -374,4 +374,8 @@ contract John is Ownable, ReentrancyGuard {
 	function getLastVerseAdded() external view returns (VerseStr memory) {
 		return verses[numberOfVerses];
 	}
+
+	function getVerseByNumber(uint256 _numericalId) external view returns(VerseStr memory) {
+		return verses[_numericalId];
+	}
 }

@@ -310,7 +310,7 @@ const deployedContracts = {
   },
   31337: {
     John: {
-      address: "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+      address: "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
       abi: [
         {
           inputs: [
@@ -548,6 +548,52 @@ const deployedContracts = {
         {
           inputs: [],
           name: "getLastVerseAdded",
+          outputs: [
+            {
+              components: [
+                {
+                  internalType: "uint256",
+                  name: "verseId",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "verseNumber",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "chapterNumber",
+                  type: "uint256",
+                },
+                {
+                  internalType: "string",
+                  name: "verseContent",
+                  type: "string",
+                },
+                {
+                  internalType: "bool",
+                  name: "confirmed",
+                  type: "bool",
+                },
+              ],
+              internalType: "struct John.VerseStr",
+              name: "",
+              type: "tuple",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "_numericalId",
+              type: "uint256",
+            },
+          ],
+          name: "getVerseByNumber",
           outputs: [
             {
               components: [
