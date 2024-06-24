@@ -6,6 +6,8 @@ import { GQL_VERSES_For_Display_search_by_chapter } from "~~/helpers/getQueries"
 import { notification } from "~~/utils/scaffold-eth";
 
 export const VersesList_Read = () => {
+  const [isFirstRun, setIsFirstRun] = useState(true);
+
   const client = useApolloClient();
   const [viewStyleDisplayString, setViewStyleDisplayString] = useState("List View");
 
@@ -24,10 +26,14 @@ export const VersesList_Read = () => {
   const [queryLoading, setQueryLoading] = useState(false);
 
   useEffect(() => {
-    setQueryLoading(true);
-    preQuery();
-    setQueryLoading(false);
-  }, [pageSize, pageNum, selectedVerse]);
+    if (!isFirstRun) preQuery();
+    else setIsFirstRun(false);
+  }, [pageSize, pageNum]);
+
+  // prevents double-querying on page load
+  useEffect(() => {
+    if (!isFirstRun) preQuery();
+  }, [isFirstRun]);
 
   useEffect(() => {
     if (isListMode) setViewStyleDisplayString("List View");
@@ -35,6 +41,7 @@ export const VersesList_Read = () => {
   }, [isListMode]);
 
   const preQuery = async () => {
+    setQueryLoading(true);
     if (isNaN(selectedChapter) && isNaN(selectedVerse)) {
       doQuery({
         limit: pageSize,
@@ -65,6 +72,7 @@ export const VersesList_Read = () => {
   //     - the table to initially load with data
   //     - then, the filtering of the data via the Search Bar
   const doQuery = async (options: object) => {
+    console.log("querying");
     setQueryLoading(true);
     const thisChapterQuery = isNaN(selectedChapter) ? "" : selectedChapter;
     const thisVerseQuery = isNaN(selectedVerse) ? "" : selectedVerse;
@@ -95,6 +103,16 @@ export const VersesList_Read = () => {
 
   const handleToggle = () => {
     setIsListMode(!isListMode);
+  };
+
+  const getClicked = () => {
+    // need to be at page one
+    // a change of page num will also cause a query
+    if (pageNum === 0) {
+      preQuery();
+    } else {
+      setPageNum(0);
+    }
   };
 
   return (
@@ -173,7 +191,7 @@ export const VersesList_Read = () => {
               </select>
             </>
           )}
-          <button className="px-8 py-2 text-xl bg-primary" onClick={() => preQuery()}>
+          <button className="px-8 py-2 text-xl bg-primary" onClick={() => getClicked()}>
             GET
           </button>
         </div>
