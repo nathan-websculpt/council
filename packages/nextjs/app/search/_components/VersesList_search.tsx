@@ -4,6 +4,8 @@ import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 import { GQL_VERSES_For_Display_with_search } from "~~/helpers/getQueries";
 
 export const VersesList_Search = () => {
+  const [isFirstRun, setIsFirstRun] = useState(true);
+
   const client = useApolloClient();
   const [userSearchInput, setUserSearchInput] = useState("");
   const [pageSize, setPageSize] = useState(25);
@@ -12,10 +14,17 @@ export const VersesList_Search = () => {
   const [queryLoading, setQueryLoading] = useState(false);
 
   useEffect(() => {
-    preQuery();
+    if (!isFirstRun) preQuery();
+    else setIsFirstRun(false);
   }, [pageSize, pageNum]);
 
+  // prevents double-querying on page load
+  useEffect(() => {
+    if (!isFirstRun) preQuery();
+  }, [isFirstRun]);
+
   const preQuery = async () => {
+    setQueryLoading(true);
     if (userSearchInput.trim().length === 0) {
       doQuery({
         limit: pageSize,
@@ -36,6 +45,7 @@ export const VersesList_Search = () => {
   //     - the table to initially load with data
   //     - then, the filtering of the data via the Search Bar
   const doQuery = async (options: object) => {
+    console.log("querying");
     setQueryLoading(true);
     await client
       .query({

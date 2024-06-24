@@ -15,7 +15,6 @@ export const VersesList_Read = () => {
   const defaultVerseValue = "Select Verse";
   const metaData = getJohnMetaData();
   const [versesList, setVersesList] = useState<number[]>([]);
-  const [previousSelectedChapter, setPreviousSelectedChapter] = useState(defaultChapterValue);
   const [selectedChapter, setSelectedChapter] = useState(defaultChapterValue);
   const [selectedVerse, setSelectedVerse] = useState(defaultVerseValue);
 

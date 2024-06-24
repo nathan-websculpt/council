@@ -20,6 +20,8 @@ import { GQL_VERSES_For_Confirmation } from "~~/helpers/getQueries";
 // !isViewAllMode means you are reading from "filteredVerseList"
 
 export const GetVerses = () => {
+  const [isFirstRun, setIsFirstRun] = useState(true);
+
   const defaultChapterValue = "Select Chapter";
   const defaultVerseValue = "Select Verse";
   const REFRESH_INTERVAL = 2000; //PRODTODO: 6000
@@ -41,7 +43,7 @@ export const GetVerses = () => {
   const [pageSize, setPageSize] = useState(25);
   const [pageNum, setPageNum] = useState(0);
   const [data, setData] = useState({});
-  const [queryLoading, setQueryLoading] = useState(false);
+  const [queryLoading, setQueryLoading] = useState(true); // only used on initial load
 
   const [readyToPoll, setReadyToPoll] = useState(false);
 
@@ -72,10 +74,17 @@ export const GetVerses = () => {
   }, [isViewAllMode]);
 
   useEffect(() => {
-    setQueryLoading(true);
-    preQuery();
-    setQueryLoading(false);
+    if (!isFirstRun) preQuery();
+    else setIsFirstRun(false);
   }, [pageSize, pageNum, selectedVerse]);
+
+  // prevents double-querying on page load
+  useEffect(() => {
+    if (!isFirstRun) {
+      preQuery();
+      if (queryLoading) setQueryLoading(false);
+    }
+  }, [isFirstRun]);
 
   const preQuery = async () => {
     if (!isNaN(selectedVerse)) {
