@@ -1,5 +1,7 @@
 # Gospel of John on Optimism
 
+###### Note that the *Main Branch* is significantly ahead of the [Production Branch](https://github.com/nathan-websculpt/gospel/tree/_0_vercel_op_mainnet)
+
 - proof-of-concept
 - Gospel of John stored (separated verse-by-verse) onchain
 - Queried and Searchable via a (The Graph) subgraph
