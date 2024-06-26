@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useApolloClient } from "@apollo/client";
-import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
+import { ArrowLeftIcon, ArrowRightIcon, MagnifyingGlassCircleIcon } from "@heroicons/react/24/outline";
 import { GQL_VERSES_For_Display_with_search } from "~~/helpers/getQueries";
 
 export const VersesList_Search = () => {
@@ -103,18 +103,20 @@ export const VersesList_Search = () => {
           )}
         </div> */}
 
-      <div className="flex flex-col gap-1 mb-12 md:flex-row">
-        <input
-          className="w-full h-12 pl-4 bg-secondary text-secondary-content"
-          placeholder="Search by text"
-          value={userSearchInput}
-          onChange={e => setUserSearchInput(e.target.value)}
-          onKeyDown={e => (e.key === "Enter" ? handleSearch() : null)}
-        ></input>
-        <button className="px-8 py-2 text-xl bg-primary" onClick={() => handleSearch()}>
-          SEARCH
-        </button>
-        <button className="px-8 py-2 text-xl bg-primary" onClick={() => clearSearch()}>
+      <div className="flex flex-col gap-1 p-6 mb-12 sm:p-0 md:flex-row md:justify-center">
+        <div className="flex flex-row md:w-3/4">
+          <input
+            className="w-full h-12 pl-4 bg-secondary text-secondary-content"
+            placeholder="Search by text"
+            value={userSearchInput}
+            onChange={e => setUserSearchInput(e.target.value)}
+            onKeyDown={e => (e.key === "Enter" ? handleSearch() : null)}
+          ></input>
+          <button className="px-4 py-2 md:px-8 bg-primary" onClick={() => handleSearch()}>
+            <MagnifyingGlassCircleIcon className="w-8 h-8" />
+          </button>
+        </div>
+        <button className="px-8 py-2 text-sm md:text-xl bg-primary" onClick={() => clearSearch()}>
           CLEAR
         </button>
       </div>
