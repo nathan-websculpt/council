@@ -168,7 +168,7 @@ export const VersesList_Read = () => {
           {metaData !== undefined && metaData !== null && (
             <>
               <select
-                className="px-2 py-2 mr-1 text-xs sm:px-6 sm:py-2 sm:mr-2 bg-primary sm:text-sm md:text-md lg:text-lg"
+                className="w-32 px-2 py-2 mr-1 text-xs sm:px-6 sm:py-2 sm:mr-2 bg-primary sm:text-sm md:text-md lg:text-lg sm:w-44"
                 value={selectedChapter}
                 onChange={changeChapter}
               >
@@ -181,7 +181,7 @@ export const VersesList_Read = () => {
               </select>
 
               <select
-                className="px-2 py-2 mr-2 text-xs sm:px-6 sm:py-2 sm:mr-4 bg-primary sm:text-sm md:text-md lg:text-lg"
+                className="w-32 px-2 py-2 mr-2 text-xs sm:px-6 sm:py-2 sm:mr-4 bg-primary sm:text-sm md:text-md lg:text-lg sm:w-44"
                 value={selectedVerse}
                 onChange={changeVerse}
               >

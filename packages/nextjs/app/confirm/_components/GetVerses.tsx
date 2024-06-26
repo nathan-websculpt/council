@@ -220,10 +220,14 @@ export const GetVerses = () => {
             </>
           )}
         </div>
-        <div className="flex flex-col justify-center gap-1 mt-4 md:justify-around md:flex-row lg:mt-0">
+        <div className="flex flex-row justify-center gap-1 mt-4 md:justify-around lg:mt-0">
           {metaData !== undefined && metaData !== null && (
             <>
-              <select className="px-6 py-2 mr-4 bg-primary" value={selectedChapter} onChange={changeChapter}>
+              <select
+                className="w-32 px-6 py-2 mr-4 text-xs sm:w-44 bg-primary sm:text-sm md:text-md lg:text-lg"
+                value={selectedChapter}
+                onChange={changeChapter}
+              >
                 <option>{defaultChapterValue}</option>
                 {metaData.map(md => (
                   <option key={md.ChapterNumber.toString() + md.Verses.length.toString()} value={md.ChapterNumber}>
@@ -232,7 +236,11 @@ export const GetVerses = () => {
                 ))}
               </select>
 
-              <select className="px-6 py-2 bg-primary" value={selectedVerse} onChange={changeVerse}>
+              <select
+                className="w-32 px-6 py-2 text-xs sm:w-44 bg-primary sm:text-sm md:text-md lg:text-lg"
+                value={selectedVerse}
+                onChange={changeVerse}
+              >
                 <option>{defaultVerseValue}</option>
                 {versesList !== undefined && versesList !== null && (
                   <>
