@@ -49,24 +49,24 @@ export const AddVerses = () => {
 
   return (
     <>
-      <p>how many in batch?</p>
+      <p className="text-sm font-bold md:text-md lg:text-lg">how many in batch?</p>
       <input
-        className="w-3/4 input input-bordered input-accent"
+        className="w-full sm:w-3/4 input input-bordered input-accent"
         value={amountInBatch}
         onChange={e => setAmountInBatch(parseInt(e.target.value))}
       />
-      <p>choose where to start</p>
-      <div className="flex flex-row justfy-between">
+      <p className="text-sm font-bold md:text-md lg:text-lg">choose where to start</p>
+      <div className="flex flex-col gap-2 md:flex-row md:justfy-between">
         <input
           placeholder="chapter number"
-          className="w-3/4 input input-bordered input-accent"
+          className="w-full sm:w-3/4 input input-bordered input-accent"
           value={selectedChapter}
           onChange={e => setSelectedChapter(e.target.value)}
         />
 
         <input
           placeholder="verse number"
-          className="w-3/4 input input-bordered input-accent"
+          className="w-full sm:w-3/4 input input-bordered input-accent"
           value={selectedVerse}
           onChange={e => setSelectedVerse(e.target.value)}
         />
@@ -76,14 +76,18 @@ export const AddVerses = () => {
         </button>
       </div>
 
-      <div className="px-6 pt-10 pb-8 mt-6 shadow-xl bg-primary sm:mx-auto sm:max-w-11/12 md:w-full sm:rounded-lg sm:px-10">
-        {selectedVersesObject?.map(verse => (
-          <div key={verse.FullVerseChapter} className="flex flex-row gap-6">
-            <p className="text-lg text-nowrap">{verse?.FullVerseChapter}</p>
-            <p className="text-2xl">{verse?.VerseContent}</p>
+      {selectedVersesObject?.length > 0 && (
+        <>
+          <div className="px-6 pt-10 pb-8 mt-6 shadow-xl bg-primary sm:mx-auto sm:max-w-11/12 md:w-full sm:rounded-lg sm:px-10">
+            {selectedVersesObject?.map(verse => (
+              <div key={verse.FullVerseChapter} className="flex flex-row gap-6">
+                <p className="text-lg text-nowrap">{verse?.FullVerseChapter}</p>
+                <p className="text-2xl">{verse?.VerseContent}</p>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </>
+      )}
 
       <div className="mt-6 mb-6">
         <button className="btn btn-primary" onClick={() => getNextVerse()}>
