@@ -9,7 +9,7 @@ export const VersesList_Read = () => {
   const [isFirstRun, setIsFirstRun] = useState(true);
 
   const client = useApolloClient();
-  const [viewStyleDisplayString, setViewStyleDisplayString] = useState("List View");
+  const [viewStyleDisplayString, setViewStyleDisplayString] = useState("Book View");
 
   const defaultChapterValue = "Select Chapter";
   const defaultVerseValue = "Select Verse";
@@ -18,7 +18,7 @@ export const VersesList_Read = () => {
   const [selectedChapter, setSelectedChapter] = useState(defaultChapterValue);
   const [selectedVerse, setSelectedVerse] = useState(defaultVerseValue);
 
-  const [isListMode, setIsListMode] = useState(true);
+  const [isListMode, setIsListMode] = useState(false);
   const [pageSize, setPageSize] = useState(25);
   const [pageNum, setPageNum] = useState(0);
   const [data, setData] = useState({});
@@ -198,7 +198,10 @@ export const VersesList_Read = () => {
               </select>
             </>
           )}
-          <button className="px-2 py-2 mr-1 text-xs sm:px-6 sm:py-2 sm:mr-2 sm:px-8 bg-primary sm:text-sm md:text-md lg:text-lg" onClick={() => getClicked()}>
+          <button
+            className="px-2 py-2 mr-1 text-xs sm:px-6 sm:py-2 sm:mr-2 sm:px-8 bg-primary sm:text-sm md:text-md lg:text-lg"
+            onClick={() => getClicked()}
+          >
             GET
           </button>
         </div>
