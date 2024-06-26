@@ -250,9 +250,9 @@ export const GetVerses = () => {
       </div>
 
       <div className="flex justify-center gap-3 mb-3">
-        <span className="my-auto text-lg">Page {pageNum + 1}</span>
+        <span className="my-auto text-sm sm:text-md md:text-xl">Page {pageNum + 1}</span>
         <select
-          className="px-4 py-2 text-xl bg-primary"
+          className="px-2 py-1 text-sm sm:px-4 sm:py-2 sm:text-md md:text-xl bg-primary"
           onChange={event => setPageSize(parseInt(event.target.value))}
           value={pageSize.toString()}
         >
