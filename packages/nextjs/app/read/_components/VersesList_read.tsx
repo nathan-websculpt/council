@@ -246,7 +246,7 @@ export const VersesList_Read = () => {
                 ))}
               </div>
             ) : (
-              <div className="pt-10 pb-8 pl-4 pr-3 mt-6 shadow-xl bg-primary sm:mx-auto sm:max-w-11/12 md:w-3/4 sm:rounded-lg sm:px-10 md:pl-10 md:pr-12 xl:pl-18 xl:pr-16">
+              <div className="pt-10 pb-8 pl-4 pr-3 mt-6 shadow-xl bg-primary sm:mx-auto sm:max-w-11/12 lg:w-3/4 sm:rounded-lg sm:px-10 md:pl-10 md:pr-12 xl:pl-16 xl:pr-16 2xl:pl-20 2xl:pr-16">
                 {data?.verses?.map(verse => (
                   <span key={verse.id.toString()} className="pl-2 text-sm align-text-bottom">
                     {verse.chapterNumber}:{verse.verseNumber}
