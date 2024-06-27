@@ -3,7 +3,6 @@ import { useApolloClient } from "@apollo/client";
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 import { getJohnMetaData } from "~~/helpers/JohnMeta";
 import { GQL_VERSES_For_Display_search_by_chapter } from "~~/helpers/getQueries";
-import { notification } from "~~/utils/scaffold-eth";
 
 export const VersesList_Read = () => {
   const [isFirstRun, setIsFirstRun] = useState(true);
