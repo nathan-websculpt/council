@@ -19,7 +19,7 @@ import { GQL_VERSES_For_Confirmation } from "~~/helpers/getQueries";
 // isViewAllMode means you are reading from "data"
 // !isViewAllMode means you are reading from "filteredVerseList"
 
-export const GetVerses = () => {
+export const VersesList_Confirm = () => {
   const [isFirstRun, setIsFirstRun] = useState(true);
 
   const defaultChapterValue = "Select Chapter";

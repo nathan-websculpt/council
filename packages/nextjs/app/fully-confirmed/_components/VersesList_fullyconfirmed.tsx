@@ -3,7 +3,7 @@ import { useQuery } from "@apollo/client";
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 import { GQL_VERSES_Fully_Confirmed } from "~~/helpers/getQueries";
 
-export const GetVerses = () => {
+export const VersesList_FullyConfirmed = () => {
   const [pageSize, setPageSize] = useState(25);
   const [pageNum, setPageNum] = useState(0);
 
