@@ -12,7 +12,7 @@ const AddVersesPage: NextPage = () => {
           <div className="px-5">
             <h1 className="text-center">
               <span className="block mb-2 text-4xl">Add Batch Verses</span>
-              <span className="block text-2xl font-bold">add some copy here .</span>
+              <span className="block text-2xl font-bold">add some copy here .... dev only ... try to add a verse, you can't.</span>
             </h1>
           </div>
           <div className="mt-8">

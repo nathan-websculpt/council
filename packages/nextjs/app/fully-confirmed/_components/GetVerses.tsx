@@ -35,7 +35,7 @@ export const GetVerses = () => {
         <div className="flex flex-col w-1/4 gap-3 mx-auto mb-3 sm:w-1/5">
           <span className="mx-auto text-sm font-bold sm:text-md md:text-xl">Page {pageNum + 1}</span>
           <select
-            className="px-2 py-1 text-sm sm:px-4 sm:py-2 sm:text-md md:text-xl bg-primary"
+            className="px-2 py-1 text-sm text-center sm:px-4 sm:py-2 sm:text-md md:text-xl bg-primary"
             onChange={event => setPageSize(parseInt(event.target.value))}
             value={pageSize.toString()}
           >
@@ -44,7 +44,7 @@ export const GetVerses = () => {
             <option value="10">Show 10</option>
           </select>
         </div>
-        <div className="flex justify-between">
+        <div className="flex justify-between sm:justify-around">
           <button disabled={!pageNum} className="btn btn-primary" onClick={() => setPageNum(prev => prev - 1)}>
             Previous
           </button>

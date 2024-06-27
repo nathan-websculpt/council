@@ -211,7 +211,7 @@ export const VersesList_Read = () => {
         <div className="flex flex-col w-1/4 gap-3 mx-auto mb-3 sm:w-1/5 md:w-1/6">
           <span className="mx-auto text-sm font-bold sm:text-md md:text-xl">Page {pageNum + 1}</span>
           <select
-            className="px-2 py-1 text-sm sm:px-4 sm:py-2 sm:text-md md:text-xl bg-primary"
+            className="px-2 py-1 text-sm text-center sm:px-4 sm:py-2 sm:text-md md:text-xl bg-primary"
             onChange={event => setPageSize(parseInt(event.target.value))}
             value={pageSize.toString()}
           >
@@ -220,7 +220,7 @@ export const VersesList_Read = () => {
             <option value="10">Show 10</option>
           </select>
         </div>
-        <div className="flex justify-between">
+        <div className="flex justify-between sm:justify-around">
           <button disabled={!pageNum} className="btn btn-primary" onClick={() => setPageNum(prev => prev - 1)}>
             Previous
           </button>
@@ -235,7 +235,7 @@ export const VersesList_Read = () => {
         ) : (
           <>
             {isListMode ? (
-              <div className="px-6 pt-10 pb-8 mt-6 shadow-xl bg-primary sm:mx-auto sm:max-w-11/12 md:w-full sm:rounded-lg sm:px-10">
+              <div className="px-6 pt-10 pb-8 mt-6 shadow-xl bg-primary sm:mx-auto sm:max-w-11/12 md:w-3/4 sm:rounded-lg sm:px-8 md:px-14 lg:px-20 xl:px-22">
                 {data?.verses?.map(verse => (
                   <div key={verse.id.toString()} className="flex flex-row gap-6">
                     <p className="text-sm md:text-lg text-nowrap">
@@ -246,7 +246,7 @@ export const VersesList_Read = () => {
                 ))}
               </div>
             ) : (
-              <div className="px-2 pt-10 pb-8 mt-6 shadow-xl bg-primary sm:mx-auto sm:max-w-11/12 md:w-3/4 sm:rounded-lg sm:px-10 md:px-14 lg:px-20 xl:px-28">
+              <div className="pt-10 pb-8 pl-4 pr-3 mt-6 shadow-xl bg-primary sm:mx-auto sm:max-w-11/12 md:w-3/4 sm:rounded-lg sm:px-10 md:pl-10 md:pr-12 xl:pl-18 xl:pr-16">
                 {data?.verses?.map(verse => (
                   <span key={verse.id.toString()} className="pl-2 text-sm align-text-bottom">
                     {verse.chapterNumber}:{verse.verseNumber}
