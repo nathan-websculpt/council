@@ -28,11 +28,7 @@ export const GetVerse = () => {
         />
       </div>
       {isVerseLoading || selectedVerse === undefined ? (
-        <>
-          <div className="flex flex-col items-center gap-2 p-2 m-4 mx-auto border shadow-xl border-base-300 bg-base-200 sm:rounded-lg min-h-56 min-w-56">
-            <span className="loading loading-spinner loading-lg"></span>
-          </div>
-        </>
+        <LoadingSpinner />
       ) : (
         <>
           <div className="flex flex-row mb-12">

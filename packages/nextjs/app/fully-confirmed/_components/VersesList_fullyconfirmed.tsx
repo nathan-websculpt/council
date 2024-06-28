@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useQuery } from "@apollo/client";
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 import { GQL_VERSES_Fully_Confirmed } from "~~/helpers/getQueries";
+import { LoadingSpinner } from "~~/components/LoadingSpinner";
 
 export const VersesList_FullyConfirmed = () => {
   const [pageSize, setPageSize] = useState(25);
@@ -25,9 +26,7 @@ export const VersesList_FullyConfirmed = () => {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center gap-2 p-2 m-4 mx-auto border shadow-xl border-base-300 bg-base-200 sm:rounded-lg">
-        <span className="loading loading-spinner loading-lg"></span>
-      </div>
+      <LoadingSpinner />
     );
   } else {
     return (

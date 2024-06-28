@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useApolloClient } from "@apollo/client";
 import { ArrowLeftIcon, ArrowRightIcon, MagnifyingGlassCircleIcon } from "@heroicons/react/24/outline";
 import { GQL_VERSES_For_Display_with_search } from "~~/helpers/getQueries";
+import { LoadingSpinner } from "~~/components/LoadingSpinner";
 
 export const VersesList_Search = () => {
   const [isFirstRun, setIsFirstRun] = useState(true);
@@ -148,12 +149,8 @@ export const VersesList_Search = () => {
             Next
           </button>
         </div>
-        {queryLoading ? (
-          <>
-            <div className="flex flex-col items-center gap-2 p-2 m-4 mx-auto border shadow-xl border-base-300 bg-base-200 sm:rounded-lg">
-              <span className="loading loading-spinner loading-lg"></span>
-            </div>
-          </>
+        {queryLoading ? (          
+          <LoadingSpinner />
         ) : (
           <>
             <div className="px-2 pt-10 pb-8 mt-6 shadow-xl bg-primary sm:mx-auto sm:max-w-11/12 md:w-3/4 sm:rounded-lg sm:px-8 md:px-14 lg:px-20 xl:px-22">

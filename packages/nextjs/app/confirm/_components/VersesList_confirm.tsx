@@ -6,6 +6,7 @@ import { useAccount } from "wagmi";
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 import { getJohnMetaData } from "~~/helpers/JohnMeta";
 import { GQL_VERSES_For_Confirmation } from "~~/helpers/getQueries";
+import { LoadingSpinner } from "~~/components/LoadingSpinner";
 
 // has three view modes
 //    1. Next-Up View
@@ -282,11 +283,7 @@ export const VersesList_Confirm = () => {
         </button>
       </div>
       {queryLoading ? (
-        <>
-          <div className="flex flex-col items-center gap-2 p-2 m-4 mx-auto border shadow-xl border-base-300 bg-base-200 sm:rounded-lg">
-            <span className="loading loading-spinner loading-lg"></span>
-          </div>
-        </>
+          <LoadingSpinner />
       ) : (
         <>
           {isViewAllMode ? (

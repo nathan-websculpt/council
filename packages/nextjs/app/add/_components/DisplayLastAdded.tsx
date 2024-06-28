@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useQuery } from "@apollo/client";
 import { GQL_VERSE_Last_Added } from "~~/helpers/getQueries";
+import { LoadingSpinner } from "~~/components/LoadingSpinner";
 
 export const DiplayLastAdded = () => {
   const { loading, error, data } = useQuery(GQL_VERSE_Last_Added(), {
@@ -16,10 +17,8 @@ export const DiplayLastAdded = () => {
   }, [data]);
 
   if (loading) {
-    return (
-      <div className="flex flex-col items-center gap-2 p-2 m-4 mx-auto border shadow-xl border-base-300 bg-base-200 sm:rounded-lg">
-        <span className="loading loading-spinner loading-lg"></span>
-      </div>
+    return (      
+      <LoadingSpinner />
     );
   } else if (data?.verses?.length > 0) {
     return (
