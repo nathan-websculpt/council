@@ -11,7 +11,7 @@ import { LoadingSpinner } from "~~/components/LoadingSpinner";
 // has three view modes
 //    1. Next-Up View
 //      a. shows the user's next verse to confirm
-//    2. View All
+//    2. Viewing All
 //      a. shows all verses
 //    3. Cascading DDLs
 //      a. shows the single verse from selections off of 2 drop-down lists (chapter and verse)
@@ -65,7 +65,7 @@ export const VersesList_Confirm = () => {
   }, [selectedVerse, selectedChapter]);
 
   useEffect(() => {
-    if (isViewAllMode) setViewStyleDisplayString("View All");
+    if (isViewAllMode) setViewStyleDisplayString("Viewing All");
     else {
       setViewStyleDisplayString("Next-Up View");
       setSelectedChapter(defaultChapterValue);
