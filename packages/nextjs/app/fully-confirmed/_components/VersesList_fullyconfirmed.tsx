@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useQuery } from "@apollo/client";
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
-import { GQL_VERSES_Fully_Confirmed } from "~~/helpers/getQueries";
 import { LoadingSpinner } from "~~/components/LoadingSpinner";
+import { GQL_VERSES_Fully_Confirmed } from "~~/helpers/getQueries";
 
 export const VersesList_FullyConfirmed = () => {
   const [pageSize, setPageSize] = useState(25);
@@ -25,9 +25,7 @@ export const VersesList_FullyConfirmed = () => {
   }, [data]);
 
   if (loading) {
-    return (
-      <LoadingSpinner />
-    );
+    return <LoadingSpinner />;
   } else {
     return (
       <>
@@ -61,7 +59,7 @@ export const VersesList_FullyConfirmed = () => {
 
         {data?.verses?.map(verse => (
           <div key={verse.id.toString()} className="flex flex-row">
-            <div className="px-6 pt-10 pb-8 mt-6 shadow-xl bg-primary sm:mx-auto sm:max-w-11/12 md:w-full sm:rounded-lg sm:px-10">
+            <div className="w-full px-6 pt-10 pb-8 mx-auto mt-6 shadow-xl bg-primary md:w-11/12 xl:w-4/5 sm:rounded-lg sm:px-10">
               <p className="text-lg">
                 {verse?.chapterNumber} : {verse?.verseNumber}
               </p>

@@ -4,9 +4,9 @@ import { useApolloClient } from "@apollo/client";
 import { useInterval } from "usehooks-ts";
 import { useAccount } from "wagmi";
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
+import { LoadingSpinner } from "~~/components/LoadingSpinner";
 import { getJohnMetaData } from "~~/helpers/JohnMeta";
 import { GQL_VERSES_For_Confirmation } from "~~/helpers/getQueries";
-import { LoadingSpinner } from "~~/components/LoadingSpinner";
 
 // has three view modes
 //    1. Next-Up View
@@ -204,7 +204,7 @@ export const VersesList_Confirm = () => {
                   />
                 </svg>
               </label>
-              <p className="text-xl">{viewStyleDisplayString}</p>
+              <p className="text-sm font-bold sm:text-md xl:text-xl">{viewStyleDisplayString}</p>
             </>
           ) : (
             <>
@@ -258,7 +258,7 @@ export const VersesList_Confirm = () => {
         </div>
       </div>
 
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between md:justify-around">
         <button
           disabled={!pageNum}
           className="text-sm btn btn-primary sm:text-md xl:text-xl"
@@ -283,7 +283,7 @@ export const VersesList_Confirm = () => {
         </button>
       </div>
       {queryLoading ? (
-          <LoadingSpinner />
+        <LoadingSpinner />
       ) : (
         <>
           {isViewAllMode ? (
