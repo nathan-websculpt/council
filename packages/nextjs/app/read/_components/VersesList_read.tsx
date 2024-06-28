@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useApolloClient } from "@apollo/client";
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
+import { LoadingSpinner } from "~~/components/LoadingSpinner";
+import { VersesDisplay_ListView } from "~~/components/VersesDisplay_listview";
 import { getJohnMetaData } from "~~/helpers/JohnMeta";
 import { GQL_VERSES_For_Display_search_by_chapter } from "~~/helpers/getQueries";
-import { LoadingSpinner } from "~~/components/LoadingSpinner";
 
 export const VersesList_Read = () => {
   const [isFirstRun, setIsFirstRun] = useState(true);
@@ -240,16 +241,7 @@ export const VersesList_Read = () => {
         ) : (
           <>
             {isListMode ? (
-              <div className="px-6 pt-10 pb-8 mt-6 shadow-xl bg-primary sm:mx-auto sm:max-w-11/12 md:w-3/4 sm:rounded-lg sm:px-8 md:px-14 lg:px-20 xl:px-22">
-                {data?.verses?.map(verse => (
-                  <div key={verse.id.toString()} className="flex flex-row gap-6">
-                    <p className="text-sm md:text-lg text-nowrap">
-                      {verse.chapterNumber} : {verse.verseNumber}
-                    </p>
-                    <p className="text-md md:text-2xl">{verse.verseContent}</p>
-                  </div>
-                ))}
-              </div>
+              <>{data?.verses?.length > 0 && <VersesDisplay_ListView verses={data.verses} />}</>
             ) : (
               <div className="pt-10 pb-8 pl-4 pr-3 mt-6 shadow-xl bg-primary sm:mx-auto sm:max-w-11/12 lg:w-3/4 sm:rounded-lg sm:px-10 md:pl-10 md:pr-12 xl:pl-16 xl:pr-16 2xl:pl-20 2xl:pr-16">
                 {data?.verses?.map(verse => (

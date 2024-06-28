@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useApolloClient } from "@apollo/client";
 import { ArrowLeftIcon, ArrowRightIcon, MagnifyingGlassCircleIcon } from "@heroicons/react/24/outline";
-import { GQL_VERSES_For_Display_with_search } from "~~/helpers/getQueries";
 import { LoadingSpinner } from "~~/components/LoadingSpinner";
+import { GQL_VERSES_For_Display_with_search } from "~~/helpers/getQueries";
+import { VersesDisplay_ListView } from "~~/components/VersesDisplay_listview";
 
 export const VersesList_Search = () => {
   const [isFirstRun, setIsFirstRun] = useState(true);
@@ -149,21 +150,10 @@ export const VersesList_Search = () => {
             Next
           </button>
         </div>
-        {queryLoading ? (          
+        {queryLoading ? (
           <LoadingSpinner />
         ) : (
-          <>
-            <div className="px-2 pt-10 pb-8 mt-6 shadow-xl bg-primary sm:mx-auto sm:max-w-11/12 md:w-3/4 sm:rounded-lg sm:px-8 md:px-14 lg:px-20 xl:px-22">
-              {data?.verses?.map(verse => (
-                <div key={verse.id.toString()} className="flex flex-row gap-6">
-                  <p className="text-sm md:text-lg text-nowrap">
-                    {verse.chapterNumber} : {verse.verseNumber}
-                  </p>
-                  <p className="text-md md:text-2xl">{verse.verseContent}</p>
-                </div>
-              ))}
-            </div>
-          </>
+          <>{data?.verses?.length > 0 && <VersesDisplay_ListView verses={data.verses} />}</>
         )}
 
         <div className="flex justify-end gap-3 mx-5 mt-5">
