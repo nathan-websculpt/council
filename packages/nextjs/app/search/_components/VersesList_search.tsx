@@ -121,22 +121,22 @@ export const VersesList_Search = () => {
         </button>
       </div>
       <div>
-        <div className="flex flex-col w-1/4 gap-3 mx-auto mb-3 sm:w-1/5">
-          <span className="mx-auto text-sm font-bold sm:text-md md:text-xl">Page {pageNum + 1}</span>
-          <select
-            className="px-2 py-1 text-sm text-center sm:px-4 sm:py-2 sm:text-md md:text-xl bg-primary"
-            onChange={event => setPageSize(parseInt(event.target.value))}
-            value={pageSize.toString()}
-          >
-            <option value="100">Show 100</option>
-            <option value="25">Show 25</option>
-            <option value="10">Show 10</option>
-          </select>
-        </div>
-        <div className="flex justify-between sm:justify-around">
+        <div className="flex items-center justify-between sm:justify-around">
           <button disabled={!pageNum} className="btn btn-primary" onClick={() => setPageNum(prev => prev - 1)}>
-            Previous
+            Prev
           </button>
+          <div className="flex flex-col w-1/4 gap-3 sm:w-1/5">
+            <span className="mx-auto text-sm font-bold sm:text-md md:text-xl">Page {pageNum + 1}</span>
+            <select
+              className="px-2 py-1 text-sm text-center sm:px-4 sm:py-2 sm:text-md md:text-xl bg-primary"
+              onChange={event => setPageSize(parseInt(event.target.value))}
+              value={pageSize.toString()}
+            >
+              <option value="100">Show 100</option>
+              <option value="25">Show 25</option>
+              <option value="10">Show 10</option>
+            </select>
+          </div>
           <button className="btn btn-primary" onClick={() => setPageNum(prev => prev + 1)}>
             Next
           </button>
