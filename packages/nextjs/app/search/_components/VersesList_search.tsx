@@ -116,19 +116,23 @@ export const VersesList_Search = () => {
             <MagnifyingGlassCircleIcon className="w-8 h-8" />
           </button>
         </div>
-        <button className="px-8 py-2 text-sm md:text-xl bg-primary" onClick={() => clearSearch()}>
+        <button className="px-8 py-2 text-sm xl:text-xl bg-primary" onClick={() => clearSearch()}>
           CLEAR
         </button>
       </div>
       <div>
         <div className="flex items-center justify-between sm:justify-around">
-          <button disabled={!pageNum} className="btn btn-primary" onClick={() => setPageNum(prev => prev - 1)}>
+          <button
+            disabled={!pageNum}
+            className="text-sm btn btn-primary sm:text-md xl:text-xl"
+            onClick={() => setPageNum(prev => prev - 1)}
+          >
             Prev
           </button>
           <div className="flex flex-col w-1/4 gap-3 sm:w-1/5">
-            <span className="mx-auto text-sm font-bold sm:text-md md:text-xl">Page {pageNum + 1}</span>
+            <span className="mx-auto text-sm font-bold sm:text-md xl:text-xl">Page {pageNum + 1}</span>
             <select
-              className="px-2 py-1 text-sm text-center sm:px-4 sm:py-2 sm:text-md md:text-xl bg-primary"
+              className="px-2 py-1 text-sm text-center sm:px-4 sm:py-2 sm:text-md xl:text-xl bg-primary"
               onChange={event => setPageSize(parseInt(event.target.value))}
               value={pageSize.toString()}
             >
@@ -137,7 +141,10 @@ export const VersesList_Search = () => {
               <option value="10">Show 10</option>
             </select>
           </div>
-          <button className="btn btn-primary" onClick={() => setPageNum(prev => prev + 1)}>
+          <button
+            className="text-sm btn btn-primary sm:text-md xl:text-xl"
+            onClick={() => setPageNum(prev => prev + 1)}
+          >
             Next
           </button>
         </div>
