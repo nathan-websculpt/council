@@ -1,30 +1,24 @@
 import { useEffect, useState } from "react";
 import { SaveVerses } from "./SaveVerses";
-import { IntegerVariant, isValidInteger } from "~~/components/scaffold-eth";
+import { isValidNumber } from "~~/components/CustomUtils";
 import { getGospelOfJohn } from "~~/helpers/John";
 import { notification } from "~~/utils/scaffold-eth";
 
 export const AddVerses = () => {
   const versesArray = getGospelOfJohn();
-  const [selectedChapter, setSelectedChapter] = useState<string>(undefined);
+  const [selectedChapter, setSelectedChapter] = useState("");
   const [selectedVerse, setSelectedVerse] = useState("");
   const [selectedIndex, setSelectedIndex] = useState("");
   const [amountInBatch, setAmountInBatch] = useState("150");
   const [selectedVersesObject, setSelectedVersesObject] = useState<object[]>(undefined);
+  const [isFirstRun, setIsFirstRun] = useState(true);
 
   useEffect(() => {
-    if (selectedVersesObject !== undefined) {
-      console.log("selected verses obj:", selectedVersesObject);
-    }
-  }, [selectedVersesObject]);
-
-  useEffect(() => {
-    console.log("selected index: ", selectedIndex);
-    if (selectedIndex !== undefined) {
-      setSelectedChapter("");
-      setSelectedVerse("");
-      setSelectedVersesObject(versesArray.slice(selectedIndex, amountInBatch + selectedIndex)); //starts at selection, and gets range of items
-    }
+    if (!isFirstRun)
+      setSelectedVersesObject(
+        versesArray.slice(selectedIndex, Number(amountInBatch) + selectedIndex),
+      ); //starts at selection, and gets range of items
+    else setIsFirstRun(false);
   }, [selectedIndex]);
 
   const getVerses = async () => {
@@ -44,23 +38,22 @@ export const AddVerses = () => {
   };
 
   const getNextVerse = async () => {
-    console.log(selectedIndex + amountInBatch);
-    setSelectedIndex(selectedIndex + amountInBatch);
+    setSelectedIndex(selectedIndex + Number(amountInBatch));
   };
 
   function handleAmtInBatchChange(newVal: string): void {
     const _v = newVal.trim();
-    if (_v.length === 0 || _v === "." || isValidInteger(IntegerVariant.Int16, _v, false)) setAmountInBatch(_v);
+    if (_v.length === 0 || isValidNumber(_v)) setAmountInBatch(_v);
   }
 
   function handleSelectedChapterChange(newVal: string): void {
     const _v = newVal.trim();
-    if (_v.length === 0 || _v === "." || isValidInteger(IntegerVariant.Int16, _v, false)) setSelectedChapter(_v);
+    if (_v.length === 0 || isValidNumber(_v)) setSelectedChapter(_v);
   }
 
   function handleSelectedVerseChange(newVal: string): void {
     const _v = newVal.trim();
-    if (_v.length === 0 || _v === "." || isValidInteger(IntegerVariant.Int16, _v, false)) setSelectedVerse(_v);
+    if (_v.length === 0 || isValidNumber(_v)) setSelectedVerse(_v);
   }
 
   return (
