@@ -3,8 +3,8 @@ import { useApolloClient } from "@apollo/client";
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 import { LoadingSpinner } from "~~/components/LoadingSpinner";
 import { VersesDisplay_ListView } from "~~/components/VersesDisplay_listview";
-import { getJohnMetaData } from "~~/helpers/JohnMeta";
 import { GQL_VERSES_For_Display_search_by_chapter } from "~~/helpers/getQueries";
+import { getJohnMetaData } from "~~/helpers/JohnMeta";
 
 export const VersesList_Read = () => {
   const [isFirstRun, setIsFirstRun] = useState(true);
@@ -24,6 +24,10 @@ export const VersesList_Read = () => {
   const [pageNum, setPageNum] = useState(0);
   const [data, setData] = useState({});
   const [queryLoading, setQueryLoading] = useState(true);
+  
+  useEffect(() => {
+    console.log(metaData);
+  }, [metaData]);
 
   useEffect(() => {
     if (!isFirstRun) preQuery();

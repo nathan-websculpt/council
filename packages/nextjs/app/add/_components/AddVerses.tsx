@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 import { SaveVerses } from "./SaveVerses";
+import { IntegerVariant, isValidInteger } from "~~/components/scaffold-eth";
 import { getGospelOfJohn } from "~~/helpers/John";
 import { notification } from "~~/utils/scaffold-eth";
 
 export const AddVerses = () => {
   const versesArray = getGospelOfJohn();
   const [selectedChapter, setSelectedChapter] = useState<string>(undefined);
-  const [selectedVerse, setSelectedVerse] = useState<string>(undefined);
-  const [selectedIndex, setSelectedIndex] = useState<number>(undefined);
-  const [amountInBatch, setAmountInBatch] = useState<number>(150);
+  const [selectedVerse, setSelectedVerse] = useState("");
+  const [selectedIndex, setSelectedIndex] = useState("");
+  const [amountInBatch, setAmountInBatch] = useState("150");
   const [selectedVersesObject, setSelectedVersesObject] = useState<object[]>(undefined);
 
   useEffect(() => {
@@ -47,13 +48,28 @@ export const AddVerses = () => {
     setSelectedIndex(selectedIndex + amountInBatch);
   };
 
+  function handleAmtInBatchChange(newVal: string): void {
+    const _v = newVal.trim();
+    if (_v.length === 0 || _v === "." || isValidInteger(IntegerVariant.Int16, _v, false)) setAmountInBatch(_v);
+  }
+
+  function handleSelectedChapterChange(newVal: string): void {
+    const _v = newVal.trim();
+    if (_v.length === 0 || _v === "." || isValidInteger(IntegerVariant.Int16, _v, false)) setSelectedChapter(_v);
+  }
+
+  function handleSelectedVerseChange(newVal: string): void {
+    const _v = newVal.trim();
+    if (_v.length === 0 || _v === "." || isValidInteger(IntegerVariant.Int16, _v, false)) setSelectedVerse(_v);
+  }
+
   return (
     <>
       <p className="text-sm font-bold md:text-md lg:text-lg">how many in batch?</p>
       <input
         className="w-full sm:w-3/4 input input-bordered input-accent"
         value={amountInBatch}
-        onChange={e => setAmountInBatch(parseInt(e.target.value))}
+        onChange={e => handleAmtInBatchChange(e.target.value)}
       />
       <p className="text-sm font-bold md:text-md lg:text-lg">choose where to start</p>
       <div className="flex flex-col gap-2 md:flex-row md:justfy-between">
@@ -61,14 +77,14 @@ export const AddVerses = () => {
           placeholder="chapter number"
           className="w-full sm:w-3/4 input input-bordered input-accent"
           value={selectedChapter}
-          onChange={e => setSelectedChapter(e.target.value)}
+          onChange={e => handleSelectedChapterChange(e.target.value)}
         />
 
         <input
           placeholder="verse number"
           className="w-full sm:w-3/4 input input-bordered input-accent"
           value={selectedVerse}
-          onChange={e => setSelectedVerse(e.target.value)}
+          onChange={e => handleSelectedVerseChange(e.target.value)}
         />
 
         <button className="btn btn-primary" onClick={() => getVerses()}>
