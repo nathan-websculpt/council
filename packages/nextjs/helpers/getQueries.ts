@@ -15,13 +15,60 @@ export const GQL_VERSES_For_Display = () => {
   `;
 };
 
-//for the READ page (after done uploading book - can search by chapter)
-export const GQL_VERSES_For_Display_search_by_chapter = (chapterNumberInput: string, verseNumberInput: string) => {
+export const GQL_GET_SINGLE_VERSE_search_by_chapter_and_verse = (
+  chapterNumberInput: string,
+  verseNumberInput: string,
+) => {
   if (chapterNumberInput.trim().length !== 0 && verseNumberInput.trim().length !== 0)
     return gql`
       query ($limit: Int!, $offset: Int!, $searchByChapterNumber: String, $searchByVerseNumber: String) {
         verses(
-          where: { and: [{ chapterNumber_gte: $searchByChapterNumber }, { verseNumber_gte: $searchByVerseNumber }] }
+          where: { and: [{ chapterNumber: $searchByChapterNumber }, { verseNumber: $searchByVerseNumber }] }
+          orderBy: verseId
+          orderDirection: asc
+          first: $limit
+          skip: $offset
+        ) {
+          id
+          verseId
+          chapterNumber
+          verseNumber
+          verseContent
+        }
+      }
+    `;
+};
+
+export const GQL_GET_Verses_Greater_Than = () => {
+  return gql`
+    query ($limit: Int!, $offset: Int!, $searchByVerseNumber: String) {
+      verses(
+        where: { verseId_gte: $searchByVerseNumber }
+        orderBy: verseId
+        orderDirection: asc
+        first: $limit
+        skip: $offset
+      ) {
+        id
+        verseId
+        chapterNumber
+        verseNumber
+        verseContent
+      }
+    }
+  `;
+};
+
+//for the READ page (after done uploading book - can search by chapter)
+export const GQL_VERSES_For_Display_search_by_chapter_and_verse = (
+  chapterNumberInput: string,
+  verseNumberInput: string,
+) => {
+  if (chapterNumberInput.trim().length !== 0 && verseNumberInput.trim().length !== 0)
+    return gql`
+      query ($limit: Int!, $offset: Int!, $searchByChapterNumber: String, $searchByVerseNumber: String) {
+        verses(
+          where: { and: [{ chapterNumber: $searchByChapterNumber }, { verseNumber_gte: $searchByVerseNumber }] }
           orderBy: verseId
           orderDirection: asc
           first: $limit

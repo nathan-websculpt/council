@@ -3,8 +3,12 @@ import { useApolloClient } from "@apollo/client";
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 import { LoadingSpinner } from "~~/components/LoadingSpinner";
 import { VersesDisplay_ListView } from "~~/components/VersesDisplay_listview";
-import { GQL_VERSES_For_Display_search_by_chapter } from "~~/helpers/getQueries";
 import { getJohnMetaData } from "~~/helpers/JohnMeta";
+import {
+  GQL_GET_SINGLE_VERSE_search_by_chapter_and_verse,
+  GQL_GET_Verses_Greater_Than,
+  GQL_VERSES_For_Display_search_by_chapter_and_verse,
+} from "~~/helpers/getQueries";
 
 export const VersesList_Read = () => {
   const [isFirstRun, setIsFirstRun] = useState(true);
@@ -24,10 +28,6 @@ export const VersesList_Read = () => {
   const [pageNum, setPageNum] = useState(0);
   const [data, setData] = useState({});
   const [queryLoading, setQueryLoading] = useState(true);
-  
-  useEffect(() => {
-    console.log(metaData);
-  }, [metaData]);
 
   useEffect(() => {
     if (!isFirstRun) preQuery();
@@ -59,7 +59,7 @@ export const VersesList_Read = () => {
         searchByChapterNumber: selectedChapter,
       });
     } else {
-      doQuery({
+      doQuery_single({
         limit: pageSize,
         offset: pageNum * pageSize,
         chapterNumberInput: selectedChapter,
@@ -82,7 +82,7 @@ export const VersesList_Read = () => {
     const thisVerseQuery = isNaN(selectedVerse) ? "" : selectedVerse;
     await client
       .query({
-        query: GQL_VERSES_For_Display_search_by_chapter(thisChapterQuery, thisVerseQuery),
+        query: GQL_VERSES_For_Display_search_by_chapter_and_verse(thisChapterQuery, thisVerseQuery),
         variables: options,
         fetchPolicy: "no-cache",
       })
@@ -91,6 +91,51 @@ export const VersesList_Read = () => {
       })
       .catch(e => {
         console.log("QUERY ERROR: ", e);
+      });
+    setQueryLoading(false);
+  };
+
+  const doQuery_single = async (options: object) => {
+    console.log("doQuery_single");
+    setQueryLoading(true);
+    const thisChapterQuery = isNaN(selectedChapter) ? "" : selectedChapter;
+    const thisVerseQuery = isNaN(selectedVerse) ? "" : selectedVerse;
+    await client
+      .query({
+        query: GQL_GET_SINGLE_VERSE_search_by_chapter_and_verse(thisChapterQuery, thisVerseQuery),
+        variables: options,
+        fetchPolicy: "no-cache",
+      })
+      .then(d => {
+        if (d.data?.verses?.length > 0) {
+          console.log("__________> Verse Numerical Id:", d?.data?.verses[0].verseId);
+          doQuery_doThisAfterSingle({
+            limit: pageSize,
+            offset: pageNum * pageSize,
+            searchByVerseNumber: d?.data?.verses[0].verseId,
+          });
+        }
+      })
+      .catch(e => {
+        console.log("GQL_GET_SINGLE_VERSE_search_by_chapter_and_verse QUERY ERROR: ", e);
+      });
+    setQueryLoading(false);
+  };
+
+  const doQuery_doThisAfterSingle = async (options: object) => {
+    console.log("doQuery_doThisAfterSingle");
+    setQueryLoading(true);
+    await client
+      .query({
+        query: GQL_GET_Verses_Greater_Than(),
+        variables: options,
+        fetchPolicy: "no-cache",
+      })
+      .then(d => {
+        setData(d.data);
+      })
+      .catch(e => {
+        console.log("doQuery_doThisAfterSingle QUERY ERROR: ", e);
       });
     setQueryLoading(false);
   };
