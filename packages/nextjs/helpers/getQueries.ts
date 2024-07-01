@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 
-//for the READ page (while dev is adding book)
+// for the READ page (while dev is adding book)
 export const GQL_VERSES_For_Display = () => {
   return gql`
     query ($limit: Int!, $offset: Int!) {
@@ -15,27 +15,11 @@ export const GQL_VERSES_For_Display = () => {
   `;
 };
 
-//for the READ page (after done uploading book)
-export const GQL_VERSES_by_chapter_and_verse = (chapterNumberInput: string, verseNumberInput: string) => {
-  if (chapterNumberInput.trim().length !== 0 && verseNumberInput.trim().length !== 0)
-    return gql`
-      query ($limit: Int!, $offset: Int!, $searchByChapterNumber: String, $searchByVerseNumber: String) {
-        verses(
-          where: { and: [{ chapterNumber: $searchByChapterNumber }, { verseNumber_gte: $searchByVerseNumber }] }
-          orderBy: verseId
-          orderDirection: asc
-          first: $limit
-          skip: $offset
-        ) {
-          id
-          verseId
-          chapterNumber
-          verseNumber
-          verseContent
-        }
-      }
-    `;
-  else if (chapterNumberInput.trim().length !== 0)
+// for the READ page (after done uploading book)
+// initial query on page load
+// and for Chapter DDL
+export const GQL_VERSES_by_chapter = (chapterNumberInput: string) => {
+  if (chapterNumberInput.trim().length !== 0)
     return gql`
       query ($limit: Int!, $offset: Int!, $searchByChapterNumber: String) {
         verses(
@@ -69,7 +53,7 @@ export const GQL_VERSES_by_chapter_and_verse = (chapterNumberInput: string, vers
 
 // for the READ page
 // used as part one;
-// GQL_VERSES_after_verseid is part two
+// part two is GQL_VERSES_after_verseid
 export const GQL_VERSEID_by_chapter_and_verse = () => {
   return gql`
     query ($searchByChapterNumber: String, $searchByVerseNumber: String) {

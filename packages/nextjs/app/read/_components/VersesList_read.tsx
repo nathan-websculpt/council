@@ -7,7 +7,7 @@ import { getJohnMetaData } from "~~/helpers/JohnMeta";
 import {
   GQL_VERSEID_by_chapter_and_verse,
   GQL_VERSES_after_verseid,
-  GQL_VERSES_by_chapter_and_verse,
+  GQL_VERSES_by_chapter,
 } from "~~/helpers/getQueries";
 
 export const VersesList_Read = () => {
@@ -74,13 +74,10 @@ export const VersesList_Read = () => {
   };
 
   const doQuery_basic = async (options: object) => {
-    console.log("doQuery_basic");
-    setQueryLoading(true);
     const thisChapterQuery = isNaN(selectedChapter) ? "" : selectedChapter;
-    const thisVerseQuery = isNaN(selectedVerse) ? "" : selectedVerse;
     await client
       .query({
-        query: GQL_VERSES_by_chapter_and_verse(thisChapterQuery, thisVerseQuery),
+        query: GQL_VERSES_by_chapter(thisChapterQuery),
         variables: options,
         fetchPolicy: "no-cache",
       })
@@ -88,7 +85,7 @@ export const VersesList_Read = () => {
         setData(d.data);
       })
       .catch(e => {
-        console.log("GQL_VERSES_by_chapter_and_verse QUERY ERROR: ", e);
+        console.log("GQL_VERSES_by_chapter QUERY ERROR: ", e);
       });
     setQueryLoading(false);
   };
@@ -97,7 +94,6 @@ export const VersesList_Read = () => {
   // first gets the selected numerical (Verse) ID
   // then queries for all verses that are greater-than/equal-to
   const doQuery_getVerseId = async (options: object) => {
-    console.log("doQuery_getVerseId");
     await client
       .query({
         query: GQL_VERSEID_by_chapter_and_verse(),
@@ -105,23 +101,24 @@ export const VersesList_Read = () => {
         fetchPolicy: "no-cache",
       })
       .then(d => {
-        if (d.data?.verses?.length > 0) {
+        if (d?.data?.verses?.length > 0) {
           doQuery_searchByVerseId({
             limit: pageSize,
             offset: pageNum * pageSize,
             searchByNumericalVerseId: d?.data?.verses[0].verseId,
           });
         } else {
-          console.log("No verse found on object:", d.data);
+          console.log("No verse found on object:", d?.data);
+          setQueryLoading(false);
         }
       })
       .catch(e => {
         console.log("GQL_VERSEID_by_chapter_and_verse QUERY ERROR: ", e);
+        setQueryLoading(false);
       });
   };
 
   const doQuery_searchByVerseId = async (options: object) => {
-    console.log("doQuery_searchByVerseId");
     await client
       .query({
         query: GQL_VERSES_after_verseid(),
