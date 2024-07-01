@@ -15,55 +15,8 @@ export const GQL_VERSES_For_Display = () => {
   `;
 };
 
-export const GQL_GET_SINGLE_VERSE_search_by_chapter_and_verse = (
-  chapterNumberInput: string,
-  verseNumberInput: string,
-) => {
-  if (chapterNumberInput.trim().length !== 0 && verseNumberInput.trim().length !== 0)
-    return gql`
-      query ($limit: Int!, $offset: Int!, $searchByChapterNumber: String, $searchByVerseNumber: String) {
-        verses(
-          where: { and: [{ chapterNumber: $searchByChapterNumber }, { verseNumber: $searchByVerseNumber }] }
-          orderBy: verseId
-          orderDirection: asc
-          first: $limit
-          skip: $offset
-        ) {
-          id
-          verseId
-          chapterNumber
-          verseNumber
-          verseContent
-        }
-      }
-    `;
-};
-
-export const GQL_GET_Verses_Greater_Than = () => {
-  return gql`
-    query ($limit: Int!, $offset: Int!, $searchByVerseNumber: String) {
-      verses(
-        where: { verseId_gte: $searchByVerseNumber }
-        orderBy: verseId
-        orderDirection: asc
-        first: $limit
-        skip: $offset
-      ) {
-        id
-        verseId
-        chapterNumber
-        verseNumber
-        verseContent
-      }
-    }
-  `;
-};
-
-//for the READ page (after done uploading book - can search by chapter)
-export const GQL_VERSES_For_Display_search_by_chapter_and_verse = (
-  chapterNumberInput: string,
-  verseNumberInput: string,
-) => {
+//for the READ page (after done uploading book)
+export const GQL_VERSES_by_chapter_and_verse = (chapterNumberInput: string, verseNumberInput: string) => {
   if (chapterNumberInput.trim().length !== 0 && verseNumberInput.trim().length !== 0)
     return gql`
       query ($limit: Int!, $offset: Int!, $searchByChapterNumber: String, $searchByVerseNumber: String) {
@@ -112,6 +65,42 @@ export const GQL_VERSES_For_Display_search_by_chapter_and_verse = (
         }
       }
     `;
+};
+
+// for the READ page
+// used as part one;
+// GQL_VERSES_after_verseid is part two
+export const GQL_VERSEID_by_chapter_and_verse = () => {
+  return gql`
+    query ($searchByChapterNumber: String, $searchByVerseNumber: String) {
+      verses(where: { and: [{ chapterNumber: $searchByChapterNumber }, { verseNumber: $searchByVerseNumber }] }) {
+        verseId
+      }
+    }
+  `;
+};
+
+// for the READ page
+// used after a Numerical ID is acquired from
+// GQL_VERSEID_by_chapter_and_verse
+export const GQL_VERSES_after_verseid = () => {
+  return gql`
+    query ($limit: Int!, $offset: Int!, $searchByNumericalVerseId: String) {
+      verses(
+        where: { verseId_gte: $searchByNumericalVerseId }
+        orderBy: verseId
+        orderDirection: asc
+        first: $limit
+        skip: $offset
+      ) {
+        id
+        verseId
+        chapterNumber
+        verseNumber
+        verseContent
+      }
+    }
+  `;
 };
 
 //for the SEARCH page

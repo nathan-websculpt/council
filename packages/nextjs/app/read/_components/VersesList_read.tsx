@@ -5,9 +5,9 @@ import { LoadingSpinner } from "~~/components/LoadingSpinner";
 import { VersesDisplay_ListView } from "~~/components/VersesDisplay_listview";
 import { getJohnMetaData } from "~~/helpers/JohnMeta";
 import {
-  GQL_GET_SINGLE_VERSE_search_by_chapter_and_verse,
-  GQL_GET_Verses_Greater_Than,
-  GQL_VERSES_For_Display_search_by_chapter_and_verse,
+  GQL_VERSEID_by_chapter_and_verse,
+  GQL_VERSES_after_verseid,
+  GQL_VERSES_by_chapter_and_verse,
 } from "~~/helpers/getQueries";
 
 export const VersesList_Read = () => {
@@ -47,42 +47,40 @@ export const VersesList_Read = () => {
   const preQuery = async () => {
     setQueryLoading(true);
     if (isNaN(selectedChapter) && isNaN(selectedVerse)) {
-      doQuery({
+      // get all
+      doQuery_basic({
         limit: pageSize,
         offset: pageNum * pageSize,
       });
     } else if (isNaN(selectedVerse)) {
-      doQuery({
+      // chapter selected - no verse selected
+      doQuery_basic({
         limit: pageSize,
         offset: pageNum * pageSize,
         chapterNumberInput: selectedChapter,
         searchByChapterNumber: selectedChapter,
       });
     } else {
-      doQuery_single({
-        limit: pageSize,
-        offset: pageNum * pageSize,
-        chapterNumberInput: selectedChapter,
-        verseNumberInput: selectedVerse,
+      // both chapter and verse are selected
+      // get the single verse user selected, and
+      // then send it to a separate query
+      // returning all verses with a Numerical ID that is
+      // greater-than/equal-to the selected verse
+      doQuery_getVerseId({
         searchByChapterNumber: selectedChapter,
         searchByVerseNumber: selectedVerse,
       });
     }
   };
 
-  //NOTE: useLazyQuery gets executed again IF ANY of the Options change
-  //^^^https://github.com/apollographql/apollo-client/issues/5912#issuecomment-797060422
-  //Here, I am just using the Apollo Client directly in order to allow:
-  //     - the table to initially load with data
-  //     - then, the filtering of the data via the Search Bar
-  const doQuery = async (options: object) => {
-    console.log("querying");
+  const doQuery_basic = async (options: object) => {
+    console.log("doQuery_basic");
     setQueryLoading(true);
     const thisChapterQuery = isNaN(selectedChapter) ? "" : selectedChapter;
     const thisVerseQuery = isNaN(selectedVerse) ? "" : selectedVerse;
     await client
       .query({
-        query: GQL_VERSES_For_Display_search_by_chapter_and_verse(thisChapterQuery, thisVerseQuery),
+        query: GQL_VERSES_by_chapter_and_verse(thisChapterQuery, thisVerseQuery),
         variables: options,
         fetchPolicy: "no-cache",
       })
@@ -90,44 +88,43 @@ export const VersesList_Read = () => {
         setData(d.data);
       })
       .catch(e => {
-        console.log("QUERY ERROR: ", e);
+        console.log("GQL_VERSES_by_chapter_and_verse QUERY ERROR: ", e);
       });
     setQueryLoading(false);
   };
 
-  const doQuery_single = async (options: object) => {
-    console.log("doQuery_single");
-    setQueryLoading(true);
-    const thisChapterQuery = isNaN(selectedChapter) ? "" : selectedChapter;
-    const thisVerseQuery = isNaN(selectedVerse) ? "" : selectedVerse;
+  // a 2-part query
+  // first gets the selected numerical (Verse) ID
+  // then queries for all verses that are greater-than/equal-to
+  const doQuery_getVerseId = async (options: object) => {
+    console.log("doQuery_getVerseId");
     await client
       .query({
-        query: GQL_GET_SINGLE_VERSE_search_by_chapter_and_verse(thisChapterQuery, thisVerseQuery),
+        query: GQL_VERSEID_by_chapter_and_verse(),
         variables: options,
         fetchPolicy: "no-cache",
       })
       .then(d => {
         if (d.data?.verses?.length > 0) {
-          console.log("__________> Verse Numerical Id:", d?.data?.verses[0].verseId);
-          doQuery_doThisAfterSingle({
+          doQuery_searchByVerseId({
             limit: pageSize,
             offset: pageNum * pageSize,
-            searchByVerseNumber: d?.data?.verses[0].verseId,
+            searchByNumericalVerseId: d?.data?.verses[0].verseId,
           });
+        } else {
+          console.log("No verse found on object:", d.data);
         }
       })
       .catch(e => {
-        console.log("GQL_GET_SINGLE_VERSE_search_by_chapter_and_verse QUERY ERROR: ", e);
+        console.log("GQL_VERSEID_by_chapter_and_verse QUERY ERROR: ", e);
       });
-    setQueryLoading(false);
   };
 
-  const doQuery_doThisAfterSingle = async (options: object) => {
-    console.log("doQuery_doThisAfterSingle");
-    setQueryLoading(true);
+  const doQuery_searchByVerseId = async (options: object) => {
+    console.log("doQuery_searchByVerseId");
     await client
       .query({
-        query: GQL_GET_Verses_Greater_Than(),
+        query: GQL_VERSES_after_verseid(),
         variables: options,
         fetchPolicy: "no-cache",
       })
@@ -135,7 +132,7 @@ export const VersesList_Read = () => {
         setData(d.data);
       })
       .catch(e => {
-        console.log("doQuery_doThisAfterSingle QUERY ERROR: ", e);
+        console.log("GQL_VERSES_after_verseid QUERY ERROR: ", e);
       });
     setQueryLoading(false);
   };
