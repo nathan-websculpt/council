@@ -32,8 +32,8 @@ export const CardDisplay = ({
             ? "bg-primary bg-opacity-40"
             : "transition-all duration-200 hover:bg-primary hover:-translate-y-1"
         } card card-compact`}
-        href={`${isLocalOnlyFeature && isLocalNetwork ? localHref : prodHref}`}
-        target="_blank"
+        href={`${(isLocalOnlyFeature && isLocalNetwork) || !isLocalOnlyFeature ? localHref : prodHref}`}
+        target={`${(isLocalOnlyFeature && isLocalNetwork) || !isLocalOnlyFeature ? "_self" : "_blank"}`}
       >
         <figure className="px-4 pt-4">
           <img
