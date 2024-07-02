@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { IntegerVariant, isValidInteger } from "../../../components/scaffold-eth";
+import { LoadingSpinner } from "~~/components/helpers/LoadingSpinner";
 import { useScaffoldReadContract } from "~~/hooks/scaffold-eth";
 import { notification } from "~~/utils/scaffold-eth";
 

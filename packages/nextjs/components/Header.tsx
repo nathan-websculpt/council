@@ -28,37 +28,41 @@ export const menuLinks: HeaderMenuLink[] = [
     href: "/search",
   },
   {
-    label: "Confirm Verses",
-    href: "/confirm",
-  },
-  {
-    label: "Add Verses",
-    href: "/add",
-  },
-  {
     label: "Donate",
     href: "/donate",
-  },
-  {
-    label: "Debug Contract",
-    href: "/debug",
-  },
-  {
-    label: "Test Contract",
-    href: "/onchain-test",
   },
   {
     label: "About",
     href: "/about",
   },
   {
-    label: "Edit Mode",
-    href: "/edit-mode",
+    label: "FOR DEVS",
+    href: "/developers",
   },
-  {
-    label: "Fully Confirmed",
-    href: "/fully-confirmed",
-  },
+  // {
+  //   label: "Confirm Verses",
+  //   href: "/confirm",
+  // },
+  // {
+  //   label: "Add Verses",
+  //   href: "/add",
+  // },
+  // {
+  //   label: "Debug Contract",
+  //   href: "/debug",
+  // },
+  // {
+  //   label: "Test Contract",
+  //   href: "/onchain-test",
+  // },
+  // {
+  //   label: "Fully Confirmed",
+  //   href: "/fully-confirmed",
+  // },
+  // {
+  //   label: "Edit Mode",
+  //   href: "/edit-mode",
+  // },
 ];
 
 export const HeaderMenuLinks = () => {
