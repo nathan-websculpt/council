@@ -1,8 +1,6 @@
 "use client";
 
-import { VersesList_Confirm } from "./_components/VersesList_confirm";
 import { NextPage } from "next";
-import { MainWrapper } from "~~/components/MainWrapper";
 
 const Developers: NextPage = () => {
   return (
@@ -25,8 +23,9 @@ const Developers: NextPage = () => {
               </figure>
               <div className="card-body">
                 <h2 className="card-title">Add Verses</h2>
-                <p className="text-xs opacity-60">
-                  Accordion is used for showing and hiding content but only one item can stay open at a time.
+                <p className="text-sm sm:text-md xl:text-lg opacity-80">
+                  Only users with special access can add new verses. Smart Contract will prevent you from adding more
+                  verses.
                 </p>
               </div>
             </a>
@@ -39,14 +38,14 @@ const Developers: NextPage = () => {
                 <img
                   loading="lazy"
                   className="border rounded-lg border-base-content bg-base-300 border-opacity-5"
-                  alt="Accordion"
+                  alt="Confirm Verses"
                   src="/img/mock_img/confirm_verses.png"
                 />
               </figure>
               <div className="card-body">
                 <h2 className="card-title">Confirm Verses</h2>
-                <p className="text-xs opacity-60">
-                  Accordion is used for showing and hiding content but only one item can stay open at a time.
+                <p className="text-sm sm:text-md xl:text-lg opacity-80">
+                  Looking at the source material? Pull up a verse, check it thoroughly, and confirm it onchain!
                 </p>
               </div>
             </a>
@@ -59,14 +58,14 @@ const Developers: NextPage = () => {
                 <img
                   loading="lazy"
                   className="border rounded-lg border-base-content bg-base-300 border-opacity-5"
-                  alt="Accordion"
+                  alt="debug contract"
                   src="/img/mock_img/debug_contract.png"
                 />
               </figure>
               <div className="card-body">
                 <h2 className="card-title">Debug Contract</h2>
-                <p className="text-xs opacity-60">
-                  Accordion is used for showing and hiding content but only one item can stay open at a time.
+                <p className="text-sm sm:text-md xl:text-lg opacity-80">
+                  Interact with all Smart Contract functionality in one place.
                 </p>
               </div>
             </a>
@@ -79,14 +78,14 @@ const Developers: NextPage = () => {
                 <img
                   loading="lazy"
                   className="border rounded-lg border-base-content bg-base-300 border-opacity-5"
-                  alt="Accordion"
+                  alt="test contract"
                   src="/img/mock_img/test_contract.png"
                 />
               </figure>
               <div className="card-body">
                 <h2 className="card-title">Test Contract</h2>
-                <p className="text-xs opacity-60">
-                  Accordion is used for showing and hiding content but only one item can stay open at a time.
+                <p className="text-sm sm:text-md xl:text-lg opacity-80">
+                  Bypass the subgraph to test the contract directly.
                 </p>
               </div>
             </a>
@@ -99,14 +98,14 @@ const Developers: NextPage = () => {
                 <img
                   loading="lazy"
                   className="border rounded-lg border-base-content bg-base-300 border-opacity-5"
-                  alt="Accordion"
+                  alt="contract management"
                   src="/img/mock_img/edit_mode.png"
                 />
               </figure>
               <div className="card-body">
                 <h2 className="card-title">Contract Management</h2>
-                <p className="text-xs opacity-60">
-                  Accordion is used for showing and hiding content but only one item can stay open at a time.
+                <p className="text-sm sm:text-md xl:text-lg opacity-80">
+                  Ahead of Production: To be used (by a council) to control stages of procedure.
                 </p>
               </div>
             </a>
@@ -119,14 +118,14 @@ const Developers: NextPage = () => {
                 <img
                   loading="lazy"
                   className="border rounded-lg border-base-content bg-base-300 border-opacity-5"
-                  alt="Accordion"
+                  alt="fully-confirmed verses"
                   src="/img/mock_img/fully_confirmed.png"
                 />
               </figure>
               <div className="card-body">
                 <h2 className="card-title">Fully Confirmed Verses</h2>
-                <p className="text-xs opacity-60">
-                  Accordion is used for showing and hiding content but only one item can stay open at a time.
+                <p className="text-sm sm:text-md xl:text-lg opacity-80">
+                  View verses that have already been confirmed by every member of the council.
                 </p>
               </div>
             </a>
