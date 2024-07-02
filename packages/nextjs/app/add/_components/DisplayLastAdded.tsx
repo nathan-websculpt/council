@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useQuery } from "@apollo/client";
 import { GQL_VERSE_Last_Added } from "~~/helpers/getQueries";
-import { LoadingSpinner } from "~~/components/LoadingSpinner";
+import { LoadingSpinner } from "~~/components/helpers/LoadingSpinner";
 
 export const DiplayLastAdded = () => {
   const { loading, error, data } = useQuery(GQL_VERSE_Last_Added(), {

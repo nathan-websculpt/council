@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useApolloClient } from "@apollo/client";
 import { MagnifyingGlassCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
-import { LoadingSpinner } from "~~/components/LoadingSpinner";
-import { PaginationBottom } from "~~/components/PaginationBottom";
-import { PaginationTop } from "~~/components/PaginationTop";
+import { LoadingSpinner } from "~~/components/helpers/LoadingSpinner";
+import { PaginationBottom } from "~~/components/helpers/PaginationBottom";
+import { PaginationTop } from "~~/components/helpers/PaginationTop";
 import { VersesDisplay_ListView } from "~~/components/VersesDisplay_listview";
 import { GQL_VERSES_For_Display_with_search } from "~~/helpers/getQueries";
 

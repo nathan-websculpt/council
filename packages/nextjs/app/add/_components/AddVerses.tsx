@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { SaveVerses } from "./SaveVerses";
-import { isValidNumber } from "~~/components/CustomUtils";
-import { getGospelOfJohn } from "~~/helpers/John";
+import { getGospelOfJohn } from "~~/bible_json/John";
+import { isValidNumber } from "~~/helpers/CustomUtils";
 import { notification } from "~~/utils/scaffold-eth";
 
 export const AddVerses = () => {
@@ -14,10 +14,8 @@ export const AddVerses = () => {
   const [isFirstRun, setIsFirstRun] = useState(true);
 
   useEffect(() => {
-    if (!isFirstRun)
-      setSelectedVersesObject(
-        versesArray.slice(selectedIndex, Number(amountInBatch) + selectedIndex),
-      ); //starts at selection, and gets range of items
+    if (!isFirstRun) setSelectedVersesObject(versesArray.slice(selectedIndex, Number(amountInBatch) + selectedIndex));
+    //starts at selection, and gets range of items
     else setIsFirstRun(false);
   }, [selectedIndex]);
 
@@ -30,7 +28,10 @@ export const AddVerses = () => {
     for (let i = 0; i < versesArray.length; i++) {
       if (versesArray[i].ChapterNumber.toString() === selectedChapter) {
         if (versesArray[i].VerseNumber.toString() === selectedVerse) {
-          setSelectedIndex(i);
+          if (selectedIndex === i)
+            //the selectedIndex will not be changing; still need to set Sel Verses
+            setSelectedVersesObject(versesArray.slice(selectedIndex, Number(amountInBatch) + selectedIndex));
+          else setSelectedIndex(i);
           return;
         }
       }

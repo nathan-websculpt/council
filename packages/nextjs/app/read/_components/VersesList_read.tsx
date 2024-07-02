@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useApolloClient } from "@apollo/client";
-import { LoadingSpinner } from "~~/components/LoadingSpinner";
-import { PaginationBottom } from "~~/components/PaginationBottom";
-import { PaginationTop } from "~~/components/PaginationTop";
+import { LoadingSpinner } from "~~/components/helpers/LoadingSpinner";
+import { PaginationBottom } from "~~/components/helpers/PaginationBottom";
+import { PaginationTop } from "~~/components/helpers/PaginationTop";
 import { VersesDisplay_ListView } from "~~/components/VersesDisplay_listview";
-import { getJohnMetaData } from "~~/helpers/JohnMeta";
+import { getJohnMetaData } from "~~/bible_json/JohnMeta";
 import {
   GQL_VERSEID_by_chapter_and_verse,
   GQL_VERSES_after_verseid,

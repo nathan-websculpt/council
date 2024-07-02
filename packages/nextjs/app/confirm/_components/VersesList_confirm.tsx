@@ -3,10 +3,10 @@ import { ConfirmVerse } from "./ConfirmVerse";
 import { useApolloClient } from "@apollo/client";
 import { useInterval } from "usehooks-ts";
 import { useAccount } from "wagmi";
-import { LoadingSpinner } from "~~/components/LoadingSpinner";
-import { PaginationBottom } from "~~/components/PaginationBottom";
-import { PaginationTop } from "~~/components/PaginationTop";
-import { getJohnMetaData } from "~~/helpers/JohnMeta";
+import { LoadingSpinner } from "~~/components/helpers/LoadingSpinner";
+import { PaginationBottom } from "~~/components/helpers/PaginationBottom";
+import { PaginationTop } from "~~/components/helpers/PaginationTop";
+import { getJohnMetaData } from "~~/bible_json/JohnMeta";
 import { GQL_VERSES_For_Confirmation } from "~~/helpers/getQueries";
 
 // has three view modes

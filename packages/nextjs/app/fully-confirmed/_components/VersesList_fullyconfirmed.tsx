@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useQuery } from "@apollo/client";
-import { LoadingSpinner } from "~~/components/LoadingSpinner";
-import { PaginationBottom } from "~~/components/PaginationBottom";
-import { PaginationTop } from "~~/components/PaginationTop";
+import { LoadingSpinner } from "~~/components/helpers/LoadingSpinner";
+import { PaginationBottom } from "~~/components/helpers/PaginationBottom";
+import { PaginationTop } from "~~/components/helpers/PaginationTop";
 import { GQL_VERSES_Fully_Confirmed } from "~~/helpers/getQueries";
 
 export const VersesList_FullyConfirmed = () => {
