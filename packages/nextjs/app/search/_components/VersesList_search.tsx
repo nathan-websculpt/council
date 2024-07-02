@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useApolloClient } from "@apollo/client";
 import { MagnifyingGlassCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
+import { VersesDisplay_ListView } from "~~/components/VersesDisplay_listview";
 import { LoadingSpinner } from "~~/components/helpers/LoadingSpinner";
 import { PaginationBottom } from "~~/components/helpers/PaginationBottom";
 import { PaginationTop } from "~~/components/helpers/PaginationTop";
-import { VersesDisplay_ListView } from "~~/components/VersesDisplay_listview";
 import { GQL_VERSES_For_Display_with_search } from "~~/helpers/getQueries";
 
 export const VersesList_Search = () => {
@@ -48,13 +48,7 @@ export const VersesList_Search = () => {
     }
   };
 
-  //NOTE: useLazyQuery gets executed again IF ANY of the Options change
-  //^^^https://github.com/apollographql/apollo-client/issues/5912#issuecomment-797060422
-  //Here, I am just using the Apollo Client directly in order to allow:
-  //     - the table to initially load with data
-  //     - then, the filtering of the data via the Search Bar
   const doQuery = async (options: object) => {
-    console.log("querying");
     setQueryLoading(true);
     await client
       .query({
