@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { SaveVerses } from "./SaveVerses";
-import { getGospelOfJohn } from "~~/bible_json/John";
+import { getGospelOfJohn } from "~~/json_bible/John";
 import { isValidNumber } from "~~/helpers/CustomUtils";
 import { notification } from "~~/utils/scaffold-eth";
 

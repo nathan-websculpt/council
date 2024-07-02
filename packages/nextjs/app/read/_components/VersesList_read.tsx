@@ -4,7 +4,7 @@ import { LoadingSpinner } from "~~/components/helpers/LoadingSpinner";
 import { PaginationBottom } from "~~/components/helpers/PaginationBottom";
 import { PaginationTop } from "~~/components/helpers/PaginationTop";
 import { VersesDisplay_ListView } from "~~/components/VersesDisplay_listview";
-import { getJohnMetaData } from "~~/bible_json/JohnMeta";
+import { getJohnMetaData } from "~~/json_bible/JohnMeta";
 import {
   GQL_VERSEID_by_chapter_and_verse,
   GQL_VERSES_after_verseid,

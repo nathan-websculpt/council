@@ -6,7 +6,7 @@ import { useAccount } from "wagmi";
 import { LoadingSpinner } from "~~/components/helpers/LoadingSpinner";
 import { PaginationBottom } from "~~/components/helpers/PaginationBottom";
 import { PaginationTop } from "~~/components/helpers/PaginationTop";
-import { getJohnMetaData } from "~~/bible_json/JohnMeta";
+import { getJohnMetaData } from "~~/json_bible/JohnMeta";
 import { GQL_VERSES_For_Confirmation } from "~~/helpers/getQueries";
 
 // has three view modes
