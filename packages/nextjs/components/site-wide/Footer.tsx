@@ -29,6 +29,7 @@ export const Footer = () => {
                 </Link>
               </>
             )}
+            <span>CURRENT ENV: {process.env.NEXT_PUBLIC_VERCEL_ENV}</span>
           </div>
           <SwitchTheme className={`pointer-events-auto ${isLocalNetwork ? "self-end md:self-auto" : ""}`} />
         </div>
