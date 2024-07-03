@@ -1,6 +1,7 @@
 "use client";
 
 import type { NextPage } from "next";
+import { Donate } from "./_components/Donate";
 
 const DonatePage: NextPage = () => {
   return (
@@ -11,9 +12,12 @@ const DonatePage: NextPage = () => {
           <h1 className="text-center">
             <span className="block mb-2 text-4xl">Donations</span>
             <span className="block text-2xl font-bold">
-              If you wish to donate, please send funds to websculpt.eth
+              For test/dev purposes only. If you wish to donate, please send funds to websculpt.eth
             </span>
           </h1>
+        </div>
+        <div className="mt-8">
+          <Donate />
         </div>
       </div>
       </div>

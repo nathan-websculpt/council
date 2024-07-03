@@ -45,6 +45,17 @@ const Developers: NextPage = () => {
             />
 
             <CardDisplay
+              isLocalOnlyFeature={false}
+              localHref={"/donate-dev"}
+              prodHref={"https://github.com/nathan-websculpt/gospel"}
+              prodBadge={"View on GitHub"}
+              imgSrc={"/img/mock_img/donate_dev.png"}
+              imgAlt={"donate"}
+              title={"Donate"}
+              more={"Test donating directly to Contract."}
+            />
+
+            <CardDisplay
               isLocalOnlyFeature={true}
               localHref={"/onchain-test"}
               prodHref={"https://github.com/nathan-websculpt/gospel"}
