@@ -71,7 +71,6 @@ export const Footer = () => {
             <span>·</span>
             <div className="text-center">
               <span>CURRENT ENV: {process.env.NEXT_PUBLIC_VERCEL_ENV}</span>
-              
             </div>
           </div>
         </ul>
