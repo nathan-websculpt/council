@@ -2,12 +2,12 @@
 
 import { VersesList_Search } from "./_components/VersesList_search";
 import { NextPage } from "next";
-import { MainWrapper } from "~~/components/MainWrapper";
+import { Wrapper_VerseViewer } from "~~/components/wrappers/Wrapper_VerseViewer";
 
 const Search: NextPage = () => {
   return (
     <>
-      <MainWrapper innerComponent={VersesList_Search} />
+      <Wrapper_VerseViewer innerComponent={VersesList_Search} />
     </>
   );
 };

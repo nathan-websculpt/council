@@ -2,12 +2,12 @@
 
 import { VersesList_Confirm } from "./_components/VersesList_confirm";
 import { NextPage } from "next";
-import { MainWrapper } from "~~/components/MainWrapper";
+import { Wrapper_VerseViewer } from "~~/components/wrappers/Wrapper_VerseViewer";
 
 const Confirm: NextPage = () => {
   return (
     <>
-      <MainWrapper innerComponent={VersesList_Confirm} />
+      <Wrapper_VerseViewer innerComponent={VersesList_Confirm} />
     </>
   );
 };

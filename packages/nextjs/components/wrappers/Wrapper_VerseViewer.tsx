@@ -2,7 +2,7 @@ interface Comp {
   innerComponent: any; // todo: what type?
 }
 
-export const MainWrapper = (_this: Comp) => {
+export const Wrapper_VerseViewer = (_this: Comp) => {
   return (
     // text size: text-sm sm:text-md xl:text-xl
     //

@@ -2,12 +2,12 @@
 
 import { VersesList_FullyConfirmed } from "./_components/VersesList_fullyconfirmed";
 import { NextPage } from "next";
-import { MainWrapper } from "~~/components/MainWrapper";
+import { Wrapper_VerseViewer } from "~~/components/wrappers/Wrapper_VerseViewer";
 
 const FullyConfirmed: NextPage = () => {
   return (
     <>
-      <MainWrapper innerComponent={VersesList_FullyConfirmed} />
+      <Wrapper_VerseViewer innerComponent={VersesList_FullyConfirmed} />
     </>
   );
 };
