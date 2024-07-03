@@ -1,7 +1,7 @@
 import "@rainbow-me/rainbowkit/styles.css";
 import { Metadata } from "next";
 import { ScaffoldEthAppWithProviders } from "~~/components/ScaffoldEthAppWithProviders";
-import { ThemeProvider } from "~~/components/ThemeProvider";
+import { ThemeProvider } from "~~/components/site-wide/ThemeProvider";
 import "~~/styles/globals.css";
 
 // const baseUrl = process.env.VERCEL_URL
