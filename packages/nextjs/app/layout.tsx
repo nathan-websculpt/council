@@ -13,7 +13,7 @@ const imageUrl = `${baseUrl}/thumbnail.jpg`;
 
 const title =
   process.env.NEXT_PUBLIC_VERCEL_ENV !== "production"
-    ? "Gospel Onchain " + process.env.NEXT_PUBLIC_VERCEL_ENV
+    ? "Gospel Onchain [" + process.env.NEXT_PUBLIC_VERCEL_ENV + "]"
     : "Gospel Onchain";
 const titleTemplate = "%s | Gospel Onchain";
 const description =
