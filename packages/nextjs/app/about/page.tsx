@@ -22,7 +22,9 @@ const AboutPage: NextPage = () => {
           <li>religious-works</li>
           <li>anything that we do not want to ever become censored</li>
         </ul>
-        <p className="font-semibold text-primary-content">In short: There could be a blockchain version of a book that is unchangeable (immutable).</p>
+        <p className="font-semibold text-primary-content">
+          In short: There could be a blockchain version of a book that is unchangeable (immutable).
+        </p>
         <p>
           <strong>Perhaps this is not a necessity</strong> for the <em>majority of books</em> that are likely to never
           fall <em>victim to censorship</em>; <strong>however</strong>, there are aspects of our history that show us
@@ -140,6 +142,13 @@ const AboutPage: NextPage = () => {
           <span> </span>
           <a href="https://github.com/nathan-websculpt/crowd-fund-v4" target="_blank" className="link">
             'crowd-fund-v4'
+          </a>
+          .
+        </p>
+        <p>
+          Click to view progress on the : <span> </span>
+          <a href="https://github.com/nathan-websculpt/council" target="_blank" className="link">
+            Council Project
           </a>
           .
         </p>

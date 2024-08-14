@@ -1,6 +1,8 @@
-# Gospel of John on Optimism
+#### Note that this code started out in [The Gospel Repo](https://github.com/nathan-websculpt/gospel) (*this is where the dev for enforcing a voting system will go, while the Gospel Project will remain a way for a single person to store a book*).
 
-###### Note that the *Main Branch* is significantly ahead of the [Production Branch](https://github.com/nathan-websculpt/gospel/tree/_0_vercel_op_mainnet)
+##### From the Gospel Repo 👀
+
+# Gospel of John on Optimism
 
 - proof-of-concept
 - Gospel of John stored (separated verse-by-verse) onchain
