@@ -121,6 +121,7 @@ export const GQL_VERSES_For_Display_with_search = (searchInput: string) => {
     `;
 };
 
+// reminder: old version cofirmations were after-the-fact
 //for the CONFIRMATION page
 export const GQL_VERSES_For_Confirmation = (chapterInput: string, verseInput: string) => {
   if (verseInput === undefined || verseInput === null || isNaN(verseInput))
